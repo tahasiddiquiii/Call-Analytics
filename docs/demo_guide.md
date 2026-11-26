@@ -21,7 +21,9 @@ If you see `Cannot reach Ollama`, start the server (step 4). If you see `Model â
 cd ~/Downloads/call-analytics-assignment
 source .venv/bin/activate
 curl -s localhost:11434/api/version || (LLAMA_ARG_CACHE_RAM=1024 ollama serve > /tmp/ollama.log 2>&1 &)
-ollama run qwen2.5:3b "hi" --keepalive 30m > /dev/null   # loads the model so the first call is not slow
+# Warm up on the CPU so the first call is not slow (a plain `ollama run` would load the model on the GPU)
+curl -s localhost:11434/api/generate -d '{"model":"qwen2.5:3b","prompt":"hi","stream":false,"keep_alive":"30m","options":{"num_gpu":0,"num_ctx":8192,"num_predict":1}}' > /dev/null
+ollama ps                                    # should show 100% CPU
 mkdir -p /tmp/demo/calls
 cp data/calls/call_006.txt eval/unseen_calls/call_102.txt /tmp/demo/calls/
 printf '' > /tmp/demo/calls/call_broken.txt

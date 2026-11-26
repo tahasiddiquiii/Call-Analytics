@@ -31,7 +31,5 @@ What was done, in order, on 26 November 2026. Times come from the run logs (`eva
 | 17:15 | Commit 5: final run, manual review, slides, write-up | Fresh-clone check: 114 files, tests pass |
 | later | Push to GitHub | Blocked by the Mac's saved GitHub login (first the wrong account, then a password instead of a token); needs a token or `gh auth login` |
 | later | Organised all documentation into `docs/` (this file, introduction, goals, architecture, features, rules, fixes, QA report); moved `plan.md` and the labelling guide here; corrected an inaccurate AI-usage claim (#19) | — |
-
-## Still open
-
-- Push to GitHub; confirm the repository is private and give the reviewer access.
+| later | Pushed to GitHub; changed the earlier private-repository plan | Repository kept public at my choice; submission to be sent as a zip |
+| later | Fixed the demo guide's warm-up command, which loaded the model on the GPU (the system itself always requests CPU) | New command checked with `ollama ps`: `100% CPU` |
