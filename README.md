@@ -155,6 +155,7 @@ All project documentation is in [`docs/`](docs/). Start with [`docs/introduction
 | [labeling_guide.md](docs/labeling_guide.md) | How the hand labels were made |
 | [ai_usage.md](docs/ai_usage.md) | AI tools used, what they produced, what was corrected |
 | [working_log.md](docs/working_log.md) | What was done, in order, with times |
+| [demo_guide.md](docs/demo_guide.md) | Run from scratch, a 12-minute live demo script, likely questions |
 
 ## Project layout
 

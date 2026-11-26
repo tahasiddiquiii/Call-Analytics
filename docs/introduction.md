@@ -17,6 +17,7 @@ Each record holds the six required items (summary, intent, outcome, customer sen
 | If you want to… | Read |
 |---|---|
 | Run it | [README](../README.md) (install, model download, one command) |
+| Demonstrate it | [demo_guide.md](demo_guide.md) |
 | See what was required and whether it was met | [goals.md](goals.md) |
 | Understand how it works | [architecture.md](architecture.md) |
 | See what it can do | [features.md](features.md) |
