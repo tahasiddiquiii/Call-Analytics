@@ -1,0 +1,4 @@
+16:51:51 INFO Model qwen2.5:3b on CPU via ollama 0.40.18
+16:53:49 INFO [1/2] call_101  ok  117.7s
+16:55:35 INFO [2/2] call_102  needs review  106.2s
+16:55:35 INFO Wrote eval/runs/heldout/records.json: 2 ok, 0 failed, 1 need review, 224s total

@@ -15,4 +15,11 @@
 | 7 | Record design | Schema with fixed category lists | **Decided:** flags and supervisor priority are computed by code from the model's answer, not asked of the model, so the same rule applies to every call and can be explained. |
 | 8 | First end-to-end test (call 006) | A valid record, but an evidence quote that contained the customer's full name | **Added:** privacy rule for quotes too, and a documented limitation (verbatim quotes can contain names). |
 
+| 9 | Fix the v1 errors with better prompt rules | v2: no example, a 5-step outcome rule in the prompt | **Measured worse** (outcome 3/10, references 0/5). Changed approach rather than adding more rules: three small questions, yes/no facts, and code for outcome, references and privacy (v3, v4). |
+| 10 | Pin dependency versions | `pydantic==2.14.4` | **Corrected:** it does not install on Python 3.9 (the Mac's system Python). Switched to ranges and ran the tests on 3.9 and 3.15. |
+| 11 | Prompt caching across the three questions | Worked, but Ollama's runner keeps a RAM prompt cache of up to 8 GB by default | **Added:** `LLAMA_ARG_CACHE_RAM=1024` so a long nightly run cannot exceed the 4 GB limit; confirmed in the server log. |
+| 12 | Export slides to PDF from PowerPoint by script | Blocked by PowerPoint's sandbox | Used LibreOffice (headless) instead, which also renders slide images for a visual check. |
+| 13 | Its own notes and slide text | Two misstatements: "8 of 10" copied insights (really 10 of 10), and "a customer left" (call 008 only says they may check other carriers) | **Corrected:** checked every figure and claim against the saved runs and transcripts. |
+| 14 | Summarise "offline" testing | Wrote "ran with Wi-Fi off", which had not been done | **Corrected:** ran the final pipeline under a macOS sandbox that blocks all network except localhost, and described exactly that. |
+
 Later prompt and rule changes, with before/after outputs, are in [iterations.md](iterations.md).

@@ -62,6 +62,14 @@ def test_personal_data_is_removed_from_text_fields(fake):
     for leaked in ("Carla", "Mendes", "4471", "0194", "example dot com"):
         assert leaked not in text
     assert rec.quality.redactions >= 4
+    assert "the customer the customer" not in text.lower() and "Mr. the" not in text
+
+
+def test_redaction_leaves_clean_text():
+    from callanalytics.privacy import redact
+
+    assert redact("Review the claim for Mr. Pruitt.", "Walter Pruitt")[0] == "Review the claim for the customer."
+    assert redact("Refunded to their card ending in 4471.")[0] == "Refunded to the card on file."
 
 
 def test_invalid_json_is_repaired_on_second_attempt(fake):

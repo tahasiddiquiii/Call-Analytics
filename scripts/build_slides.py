@@ -30,7 +30,7 @@ def load(path):
 bench = load("reports/benchmark.json")
 bake = load("reports/bakeoff.json")
 evals = {v: load(f"eval/runs/{v}/eval.json") for v in VERSIONS}
-final = evals[FINAL]
+final = load("reports/eval_final.json")  # outputs/records.json scored against the hand labels
 chk = final["checks"]
 
 
@@ -48,7 +48,8 @@ traps_passed = sum(ok for _, ok in final["traps"])
 
 
 def repeat_count(version):
-    recs = load(f"eval/runs/{version}/records.json")["records"]
+    path = "outputs/records.json" if version == FINAL else f"eval/runs/{version}/records.json"
+    recs = load(path)["records"]
     return sum(bool(r["flags"] and r["flags"]["repeat_contact"]) for r in recs)
 prs = new_deck()
 I = Inches
@@ -213,7 +214,7 @@ for n, (label, val) in enumerate(score_rows):
     y = I(2.3 + n * 0.47)
     text(s, I(0.85), y, I(3.1), I(0.3), label, size=12, color=LINE)
     text(s, I(3.9), y, I(1.1), I(0.3), val, size=14, bold=True, color=PAPER)
-text(s, I(0.85), I(6.5), I(4.2), I(0.3), "29 unit tests · Python 3.9 and 3.15 · offline run", size=10, color=LINE)
+text(s, I(0.85), I(6.5), I(4.2), I(0.3), "29 unit tests · Python 3.9 and 3.15 · run with internet blocked", size=10, color=LINE)
 
 risks = [
     ("Sentiment is a judgement call", "Exact-match end sentiment is lower than within-one-step: neighbouring levels are often both defensible. Shown side by side in the score."),

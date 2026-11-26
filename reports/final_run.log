@@ -1,0 +1,25 @@
+16:31:04 INFO Model qwen2.5:3b on CPU via ollama 0.40.18
+16:33:20 INFO [1/10] call_001  needs review  136.2s
+16:35:08 INFO [2/10] call_002  ok  107.6s
+16:38:02 INFO [3/10] call_003  ok  174.3s
+16:38:53 INFO [4/10] call_004  ok  50.5s
+16:41:19 INFO [5/10] call_005  needs review  146.4s
+16:43:44 INFO [6/10] call_006  ok  145.0s
+16:44:36 INFO [7/10] call_007  needs review  51.7s
+16:46:23 INFO [8/10] call_008  ok  106.9s
+16:48:51 INFO [9/10] call_009  ok  147.9s
+16:51:30 INFO [10/10] call_010  ok  159.7s
+16:51:30 INFO Wrote outputs/records.json: 10 ok, 0 failed, 3 need review, 1226s total
+{
+  "machine": "8 physical cores, 8 GB RAM",
+  "model": "qwen2.5:3b",
+  "prompt_version": "v4-9fb0167b",
+  "calls": 10,
+  "wall_seconds": 1226.8,
+  "seconds_per_call_avg": 122.6,
+  "seconds_per_call_max": 174.3,
+  "peak_model_process_ram_gb": 2.22,
+  "peak_process": "/opt/homebrew/Cellar/ollama/0.40.18/libexec/lib/ollama/llama-server --model",
+  "exit_code": 0
+}
+exit 0

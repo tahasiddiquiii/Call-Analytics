@@ -38,7 +38,12 @@ MODEL_PARAGRAPH
 - **Real traffic:** noisier speech-to-text and call types not in these 10. The scores come from 10 synthetic calls.
 
 ## AI tools I used, what I asked them, and what I had to add or correct
-AI_PARAGRAPH
+I used **Claude Code** as a coding assistant. I asked it to read the brief and calls and plan against the scoring table, draft hand labels (I reviewed them), and write the code, prompts, tests, evaluator and slides. I directed each iteration from the scores. What I had to add or correct (details in `docs/ai_usage.md`):
+- It claimed call 001's postal code was a conflict; checking the digits by hand showed it is not.
+- Its v1 prompt example was copied by the model into every record; removed. I overruled using real calls as examples, because that would leak answers into the evaluation.
+- It did not force CPU (Ollama on a Mac uses the GPU by default) or cap Ollama's prompt cache (up to 8 GB); both added and verified in the server log.
+- It pinned a library version that does not install on Python 3.9; fixed and tested on 3.9 and 3.15.
+- Its own notes overstated or misstated results twice (a count of 8/10 that was really 10/10; a "left the company" finding the call does not support); I checked every figure against the saved runs.
 
 ## What I would do with more time
 1. Hand-label ~200 real calls and measure each field before trusting the numbers. 2. Route `needs_review` calls to a person and turn corrections into tests. 3. Parallel workers for 10,000 calls a night. 4. Check that quotes *support* insights, not just exist. 5. Compare a 7B model where hardware allows.

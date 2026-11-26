@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-26T11:25:35Z",
+  "run": {
+    "model": "qwen2.5:3b",
+    "runtime": "ollama 0.40.18",
+    "device": "cpu",
+    "prompt_version": "v4-9fb0167b",
+    "input_dir": "eval/unseen_calls",
+    "calls_total": 2,
+    "calls_ok": 2,
+    "calls_failed": 0,
+    "calls_needing_review": 1,
+    "total_seconds": 223.9
+  },
+  "records": [
+    {
+      "call_id": "call_101",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Ferngrove Pharmacy",
+      "agent_name": "Lina",
+      "summary": "The customer wanted to know about the status of their repeat prescription for blood pressure medicine, which was not approved by the clinic. The agent marked the request as urgent and promised to call the clinic to approve it. The customer was relieved when the agent offered an emergency supply if the clinic did not approve the prescription.",
+      "intent": {
+        "primary": "order_issue",
+        "secondary": [],
+        "detail": "repeat prescription issue"
+      },
+      "outcome": {
+        "status": "resolved",
+        "detail": "The customer's problem was resolved with an urgent approval from the clinic, and they will receive a text message with the reference number P-R 6120.",
+        "basis": {
+          "handed_over": false,
+          "solution_agreed": true,
+          "needs_future_step": false
+        }
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "positive",
+        "overall": "positive",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Call the clinic to check on the status of the prescription request",
+          "due": null
+        },
+        {
+          "owner": "company",
+          "task": "Send a text message to the customer with the reference number P-R 6120",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "process_gap",
+          "text": "The agent did not follow up with the clinic to check the status of the prescription request.",
+          "quote": "I'll mark the request as urgent and call the clinic myself this afternoon.",
+          "verified": true
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": false,
+        "repeat_contact": false,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "low",
+      "references": [
+        {
+          "type": "other",
+          "value": "PR-6120",
+          "verified": true
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "sentiment",
+          "turn": 3,
+          "quote": "Hi. My repeat prescription was supposed to be ready yesterday but the shop says they never got it from the doctor.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 13,
+          "quote": "P R six one two zero. Thank you, Lina.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 12,
+          "quote": "You'll get a text as soon as it's ready. Your reference is P-R, six one two zero.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 14,
+        "customer_turns": 6,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "model_requests": 3,
+        "processing_seconds": 117.7,
+        "prompt_tokens": 3373,
+        "output_tokens": 491,
+        "redactions": 0,
+        "rule_corrections": [
+          "dropped churn_risk insight: the yes/no answer says no"
+        ]
+      }
+    },
+    {
+      "call_id": "call_102",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Brightcart",
+      "agent_name": "Joel",
+      "summary": "The customer wanted a refund for a returned jacket but was told it would take time and was told to try again next week. The customer expressed frustration and threatened to dispute the refund with their bank.",
+      "intent": {
+        "primary": "refund_request",
+        "secondary": [],
+        "detail": "none"
+      },
+      "outcome": {
+        "status": "unresolved",
+        "detail": "The customer was told to contact someone else to resolve the refund issue, as the agent could not solve it themselves. The customer had already contacted the company about this problem before.",
+        "basis": {
+          "handed_over": false,
+          "solution_agreed": false,
+          "needs_future_step": false
+        }
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "very_negative",
+        "overall": "very_negative",
+        "trajectory": "worsened"
+      },
+      "action_items": [
+        {
+          "owner": "company",
+          "task": "Investigate the refund process and provide a resolution for the customer",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "process_gap",
+          "text": "The refund process is taking longer than expected.",
+          "quote": "Refunds take time. It depends. I can't really see more than that.",
+          "verified": false
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": true
+      },
+      "supervisor_priority": "high",
+      "references": [
+        {
+          "type": "order",
+          "value": "BC-882041",
+          "verified": true
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "sentiment",
+          "turn": 3,
+          "quote": "Yeah. I returned a jacket three weeks ago and I still don't have my refund. Sixty dollars.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 13,
+          "quote": "Unbelievable. Bye.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 0,
+          "quote": "That's up to you. That's all I can do. I'll escalate this to someone else. I can't see more than that.",
+          "verified": false
+        }
+      ],
+      "needs_review": true,
+      "review_reasons": [
+        "outcome evidence quote not found word for word",
+        "insight quote not found word for word: process_gap"
+      ],
+      "quality": {
+        "turns": 13,
+        "customer_turns": 6,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "model_requests": 3,
+        "processing_seconds": 106.2,
+        "prompt_tokens": 3050,
+        "output_tokens": 357,
+        "redactions": 0,
+        "rule_corrections": []
+      }
+    }
+  ]
+}

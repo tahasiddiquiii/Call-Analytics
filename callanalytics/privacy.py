@@ -15,7 +15,8 @@ _SPOKEN_EMAIL = r"\b\w+(?: dot \w+)* at \w+ dot (?:com|org|net|in)\b"
 _PATTERNS = [
     (re.compile(r"\b(?:Mr|Mrs|Ms|Miss)\.? [A-Z][a-z]+\b"), "the customer"),
     (re.compile(rf"\b[\w.+-]+@[\w-]+\.[\w.]+\b|{_SPOKEN_EMAIL}", re.I), "[email removed]"),
-    (re.compile(r"\b(?:card|visa|mastercard)(?: ending)?(?: in)? \d{4}\b", re.I), "the card on file"),
+    (re.compile(r"\b(?:(?:their|his|her|the) )?(?:card|visa|mastercard)(?: ending)?(?: in)? \d{4}\b", re.I),
+     "the card on file"),
     (re.compile(r"(?<![A-Za-z-])\b(?:\d[\s-]?){7,}\b"), "[number removed]"),  # not case IDs like HM-4492017
 ]
 
@@ -32,10 +33,11 @@ def _name_patterns(customer_name: Optional[str]) -> List[re.Pattern]:
 def redact(text: str, customer_name: Optional[str] = None) -> Tuple[str, int]:
     """Return (clean text, number of replacements)."""
     count = 0
-    for pattern, repl in [(p, "the customer") for p in _name_patterns(customer_name)] + _PATTERNS:
+    patterns = _PATTERNS[:1] + [(p, "the customer") for p in _name_patterns(customer_name)] + _PATTERNS[1:]
+    for pattern, repl in patterns:
         text, n = pattern.subn(repl, text)
         count += n
-    text = re.sub(r"\bthe customer's? the customer\b", "the customer", text, flags=re.I)
+    text = re.sub(r"\b(?:the customer's?|their|his|her|the|Mr\.?|Mrs\.?|Ms\.?) the customer\b", "the customer", text, flags=re.I)
     if text.startswith("the customer"):
         text = "T" + text[1:]
     return text, count
