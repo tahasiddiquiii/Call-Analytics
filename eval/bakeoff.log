@@ -1,0 +1,3 @@
+{'model': 'qwen2.5:3b', 'outcome': '8/10', 'intent': '10/10', 'facts': '28/32', 'traps': '7/8', 'failed': 0, 'minutes': 20.4}
+{'model': 'llama3.2:3b', 'outcome': '9/10', 'intent': '9/10', 'facts': '24/32', 'traps': '7/8', 'failed': 0, 'minutes': 20.6}
+{'model': 'qwen2.5:1.5b', 'outcome': '5/10', 'intent': '10/10', 'facts': '25/32', 'traps': '5/8', 'failed': 0, 'minutes': 12.2}

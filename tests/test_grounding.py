@@ -37,6 +37,7 @@ def test_canonical_reference_format():
     assert canonical_reference("R-F-22068") == "RF-22068"
     assert canonical_reference("e s c 7812") == "ESC-7812"
     assert canonical_reference("CLM-291-446") == "CLM-291446"
+    assert canonical_reference("E S C seven eight one two") == "ESC-7812"  # v2 stored "ESCSEVENEIGHTONETWO"
 
 
 def test_spoken_ids_are_extracted_by_code_only_near_case_words():

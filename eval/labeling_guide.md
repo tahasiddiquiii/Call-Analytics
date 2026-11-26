@@ -24,6 +24,6 @@ The hand labels are the answer key the system is scored against. They were writt
 
 ## Changes to the answer key (with reasons)
 
-- **After v1:** v1 output invented a `repeat_contact` insight in 8 of 10 calls, but only calls 004 and 007 had that flag labelled, so the scorer saw just 2 of them. `repeat_contact = false` was added for calls 001, 006 and 008, where no earlier contact is mentioned at all. Calls 002, 005 and 010 stay unlabelled because the wording is ambiguous ("last time they said the promo price…", "the last couple of people I dealt with", a replacement router sent in March).
+- **After v1:** v1 output invented a `repeat_contact` insight in 10 of 10 calls, but only calls 004 and 007 had that flag labelled, so the scorer saw just 2 of them. `repeat_contact = false` was added for calls 001, 006 and 008, where no earlier contact is mentioned at all. Calls 002, 005 and 010 stay unlabelled because the wording is ambiguous ("last time they said the promo price…", "the last couple of people I dealt with", a replacement router sent in March).
 - **After v1:** the personal-data check only looked for names. v1 put a full street address (001) and card digits (005) into text fields, so `pii_terms` now also lists addresses, postal codes and phone/card/policy digits from each call.
 - No existing label was changed. All runs, including v1, are scored with the same updated key.

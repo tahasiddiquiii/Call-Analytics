@@ -1,0 +1,12 @@
+{
+  "machine": "8 physical cores, 8 GB RAM",
+  "model": "qwen2.5:3b",
+  "prompt_version": "v4-9fb0167b",
+  "calls": 10,
+  "wall_seconds": 1227.1,
+  "seconds_per_call_avg": 122.7,
+  "seconds_per_call_max": 206.8,
+  "peak_model_process_ram_gb": 2.3,
+  "peak_process": "/opt/homebrew/Cellar/ollama/0.40.18/libexec/lib/ollama/llama-server --model",
+  "exit_code": 0
+}

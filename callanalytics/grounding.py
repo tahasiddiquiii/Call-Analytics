@@ -58,7 +58,7 @@ _REF_RE = re.compile(r"^([A-Z]+)([0-9][0-9A-Z]*)$")
 
 def canonical_reference(value: str) -> str:
     """One format for every case number, so software can match them: 'R-F-22068' -> 'RF-22068'."""
-    flat = re.sub(r"[^A-Za-z0-9]", "", value).upper()
+    flat = compact(value).upper()  # number words become digits: "E S C seven eight one two" -> "ESC7812"
     m = _REF_RE.match(flat)
     return f"{m.group(1)}-{m.group(2)}" if m else (flat or value.strip())
 
