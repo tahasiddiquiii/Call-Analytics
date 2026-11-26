@@ -5,7 +5,7 @@ What was done, in order, on 26 November 2026. Times come from the run logs (`eva
 | Time | Step | Outcome |
 |---|---|---|
 | ~11:45 | Read the brief (`Assignment.docx`) and all 10 transcripts; listed what each call tests | Traps identified: prompt injection and false promises (006), test call (004), wrong number (007), conditional retention (002), off-topic chat (003), Hindi-English (001), garbled IDs (010) |
-| ~12:30 | Wrote the plan mapped to the scoring table; reviewed and approved by me with answers on submission format, slides format and labels | Private GitHub repo; PPTX + PDF; hand labels approved |
+| ~12:30 | Wrote the plan mapped to the scoring table ([plan.md](plan.md)); reviewed and approved by me with answers on submission format, slides format and labels | Private GitHub repo; PPTX + PDF; hand labels approved |
 | ~13:30 | Setup: Ollama 0.40.18 (Homebrew), `qwen2.5:3b` (1.9 GB), Python venv, git | CPU only confirmed: `offloaded 0/37 layers to GPU`, 2.4 GB loaded |
 | ~13:35 | Built parser, schema, model client, prompts v1, pipeline, CLI | First record (call 006) in 140 s; it believed the agent's false promise |
 | 13:40–13:57 | **Run v1** (10 calls, 17.6 min) | Outcome 5/10; model copied the prompt's example into every record |
@@ -29,6 +29,6 @@ What was done, in order, on 26 November 2026. Times come from the run logs (`eva
 | 16:56–17:11 | **Final run #2** (`outputs/records.json`), sandboxed, 15.5 min, peak RAM 2.13 GB | Same scores; categorical fields identical across 3 runs, wording varied |
 | ~17:12 | Supervisor summary, README results, QA texts; write-up cut to one page | — |
 | 17:15 | Commit 5: final run, manual review, slides, write-up | Fresh-clone check: 114 files, tests pass |
-| later | Trimmed and organised the documentation into `docs/` (this file, architecture, fixes, QA report, labelling guide); corrected an inaccurate AI-usage claim (#15) | — |
+| later | Trimmed and organised the documentation into `docs/` (this file, plan, architecture, fixes, QA report, labelling guide); corrected an inaccurate AI-usage claim (#15) | — |
 | later | Pushed to GitHub | Repository kept public; submission sent as a zip |
 | later | Re-checked CPU-only use: a live run with `ollama ps` | `100% CPU` |

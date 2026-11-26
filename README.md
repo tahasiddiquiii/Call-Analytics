@@ -142,6 +142,7 @@ All project documentation is in [`docs/`](docs/).
 
 | File | Contents |
 |---|---|
+| [plan.md](docs/plan.md) | The plan as approved before building |
 | [architecture.md](docs/architecture.md) | Pipeline, modules, rules in code, output contract, reliability design |
 | [iterations.md](docs/iterations.md) | v1→v4 with real before/after outputs and scores; bake-off |
 | [fixes.md](docs/fixes.md) | Every bug and wrong claim found, and how it was fixed |

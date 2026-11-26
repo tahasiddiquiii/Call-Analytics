@@ -7,7 +7,7 @@
 | # | I asked for | It produced | What I added, corrected or overruled |
 |---|---|---|---|
 | 1 | Read the brief and the 10 calls; list what each call tests | A table of "traps" per call | **Corrected:** it said call 001's postal code conflicts (500014 vs 50014). Checking the digits by hand: "five double zero one four" = 50014, matching the read-back. Removed from the expected labels. |
-| 2 | A plan mapped to the scoring table | A written plan (architecture, schema, checks, timeline) | I reviewed it, chose how to submit, and asked for both PPTX and PDF slides. |
+| 2 | A plan mapped to the scoring table | [`plan.md`](plan.md) (architecture, schema, checks, timeline) | I reviewed it, chose how to submit, and asked for both PPTX and PDF slides. |
 | 3 | Draft hand labels for the 10 calls | Labels table, later `eval/gold.json` | I reviewed and approved them before any tuning; they were frozen so the score could not be bent to fit the output. |
 | 4 | Choose and set up a local model | Ollama + Qwen2.5-3B | **Added:** forcing CPU. On a Mac, Ollama uses the GPU by default, which would break the "CPU only" rule. Set `num_gpu: 0` and confirmed in the Ollama log: `offloaded 0/37 layers to GPU`, `100% CPU`. |
 | 5 | Few-shot examples for the prompt | One invented example call, deliberately not one of the 10 provided calls | **Decided:** examples taken from the 10 calls would leak the answers into the evaluation. The invented example was later removed too (v2), because the model copied it. |
