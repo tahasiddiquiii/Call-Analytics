@@ -1,5 +1,5 @@
 {
-  "_about": "Hand labels for the 10 provided calls, written from reading each transcript and frozen before prompt tuning. Rules: eval/labeling_guide.md. must_mention: each inner list is one fact; any of its words counts as a match (searched in summary, intent/outcome detail, action items and insights, lower case). pii_terms: names, addresses, phone/card/policy digits that must not appear in text fields. Added after v1 (see labeling_guide.md): repeat_contact=false for calls 001, 006, 008 and the address/card/phone pii_terms; earlier runs are re-scored with the same key.",
+  "_about": "Hand labels for the 10 provided calls, written from reading each transcript and frozen before prompt tuning. Rules: docs/labeling_guide.md. must_mention: each inner list is one fact; any of its words counts as a match (searched in summary, intent/outcome detail, action items and insights, lower case). pii_terms: names, addresses, phone/card/policy digits that must not appear in text fields. Added after v1 (see docs/labeling_guide.md): repeat_contact=false for calls 001, 006, 008 and the address/card/phone pii_terms; earlier runs are re-scored with the same key.",
   "calls": {
     "call_001": {
       "call_type": "customer_service",

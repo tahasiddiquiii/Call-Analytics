@@ -33,7 +33,7 @@ TIME_SPENT
 - **Real traffic** is noisier than these 10 synthetic calls.
 
 ## AI tools I used, what I asked them, and what I had to add or correct
-I used **Claude Code** to plan against the scoring, draft hand labels (I reviewed them), and write the code, prompts, tests, evaluator and slides; I directed each iteration from the scores. Corrections (`docs/ai_usage.md`): it misread call 001's postal code as a conflict; its prompt example was copied into every record (removed; I overruled using real calls as examples); it did not force CPU or cap Ollama's 8 GB prompt cache (added, verified in the log); it pinned a library that breaks on Python 3.9 (fixed); its notes misstated two results (I checked every figure against the saved runs).
+I used **Claude Code** to plan against the scoring, draft hand labels (I reviewed them), and write the code, prompts, tests, evaluator and slides; I directed each iteration from the scores. Corrections (`docs/ai_usage.md`): it misread call 001's postal code as a conflict; its prompt example was copied into every record (removed; real calls were never used as examples, so the evaluation stays honest); it did not force CPU or cap Ollama's 8 GB prompt cache (added, verified in the log); it pinned a library that breaks on Python 3.9 (fixed); its notes misstated two results (I checked every figure against the saved runs).
 
 ## What I would do with more time
 Label ~200 real calls; review queue for `needs_review`; parallel workers for 10,000 calls a night; check quotes *support* insights; compare a 7B model (most important first).
