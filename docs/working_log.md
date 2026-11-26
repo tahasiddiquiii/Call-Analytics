@@ -34,5 +34,4 @@ What was done, in order, on 26 November 2026. Times come from the run logs (`eva
 
 ## Still open
 
-- Fill in **Time spent** in `submission/writeup.md` and rebuild the PDF (`python scripts/make_pdfs.py`).
 - Push to GitHub; confirm the repository is private and give the reviewer access.

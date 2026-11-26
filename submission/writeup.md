@@ -1,7 +1,7 @@
 # Call Analytics: write-up
 
 ## Time spent
-TIME_SPENT
+About 5 hours on 26 November (11:45–17:15, less a 45-minute pause), including model runs, plus documentation and a demo guide that evening (`docs/working_log.md`).
 
 ## Approach in five lines
 1. Code splits each transcript into numbered turns and reads the client brand from the greeting.

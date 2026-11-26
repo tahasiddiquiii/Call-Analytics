@@ -24,7 +24,7 @@ Build a system that turns call transcripts into **correct, faithful, machine-rea
 | 14 | README with exact install, model download and run commands | README Quick start | Done |
 | 15 | Every prompt included | `prompts/` | Done |
 | 16 | Slides: max 5, required topics and order, two complete before/after examples | `submission/slides.pptx` + `.pdf` | Done |
-| 17 | One-page write-up with the 8 headings in order | `submission/writeup.md` + `.pdf` (1 page) | Done; **time spent still to be filled in** |
+| 17 | One-page write-up with the 8 headings in order | `submission/writeup.md` + `.pdf` (1 page) | Done |
 | 18 | No model files, venvs, caches, passwords or keys | `.gitignore`; fresh-clone check: 114 files, none of these | Done |
 
 ## How the work is scored, and what was aimed at
