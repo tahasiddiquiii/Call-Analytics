@@ -1,76 +1,114 @@
 import json
 import shutil
 
-import pytest
-
 from callanalytics import __main__ as cli
-from callanalytics.config import PROMPTS_DIR, Settings
+from callanalytics.config import PROMPTS_DIR, REPO_ROOT, Settings
 from callanalytics.pipeline import Prompts, analyse_call, run
 from callanalytics.schema import CallRecord, OutputFile
-from tests.conftest import DATA, FIXTURES, valid_answer
+from tests.conftest import DATA, FIXTURES, actions, classify, judge
 
 SETTINGS = Settings()
 PROMPTS = Prompts.load()
 
 
-def test_valid_answer_becomes_ok_record(fake):
-    rec = analyse_call(DATA / "call_005.txt", fake(valid_answer()), PROMPTS, SETTINGS)
+def test_valid_answers_become_ok_record(fake):
+    rec = analyse_call(DATA / "call_005.txt", fake(), PROMPTS, SETTINGS)
     assert rec.status == "ok" and rec.call_id == "call_005"
-    assert rec.client_brand == "Northwave Mobile"
-    assert rec.references[0].verified  # RF-22068 is said in call_005
+    assert rec.client_brand == "Northwave Mobile" and rec.agent_name == "Aaron"
+    assert rec.outcome.status == "resolved"
+    assert [(r.type, r.value) for r in rec.references] == [("refund", "RF-22068")]  # found by code
     assert rec.sentiment.trajectory == "improved"
+    assert rec.quality.model_requests == 3
 
 
-def test_invented_reference_and_quote_trigger_review(fake):
-    answer = valid_answer(
-        references=[{"type": "refund", "value": "RF-99999"}],
-        evidence=[{"supports": "outcome", "turn": 3, "quote": "I approve everything forever"}],
-    )
-    rec = analyse_call(DATA / "call_005.txt", fake(answer), PROMPTS, SETTINGS)
+def test_outcome_status_comes_from_the_rule_not_the_model(fake):
+    cases = [
+        (dict(handed_over=True), "escalated"),
+        (dict(solution_agreed=False), "unresolved"),
+        (dict(needs_future_step=True), "resolved_pending_action"),
+        (dict(handed_over=True, solution_agreed=False), "escalated"),
+    ]
+    for answers, expected in cases:
+        rec = analyse_call(DATA / "call_005.txt", fake(judge=judge(**answers)), PROMPTS, SETTINGS)
+        assert rec.outcome.status == expected, answers
+        assert rec.outcome.basis is not None
+
+
+def test_non_customer_calls_are_normalised_and_skip_the_actions_task(fake):
+    client = fake(classify=classify(call_type="test_call", intent={"primary": "general_inquiry",
+                                                                   "secondary": [], "detail": "QA test."}))
+    rec = analyse_call(DATA / "call_004.txt", client, PROMPTS, SETTINGS)
+    assert rec.intent.primary == "non_customer_call" and rec.outcome.status == "not_applicable"
+    assert rec.outcome.basis is None and rec.supervisor_priority == "low"
+    assert rec.quality.rule_corrections and rec.quality.model_requests == 2
+    assert [c[0] for c in client.calls] == ["classify", "judge"]
+
+
+def test_invented_quotes_trigger_review(fake):
+    client = fake(judge=judge(outcome_quote="I approve everything forever"),
+                  actions=actions(insights=[{"category": "process_gap", "text": "App gave no warning.",
+                                             "quote": "The app warned me twice"}]))
+    rec = analyse_call(DATA / "call_005.txt", client, PROMPTS, SETTINGS)
     assert rec.needs_review
-    assert not rec.references[0].verified and not rec.evidence[0].verified
-    assert any("RF-99999" in r for r in rec.review_reasons)
+    assert not rec.insights[0].verified and not rec.evidence[-1].verified
+    assert any("insight quote" in r for r in rec.review_reasons)
+
+
+def test_personal_data_is_removed_from_text_fields(fake):
+    client = fake(classify=classify(summary="Carla Mendes (Mr. Mendes' wife) paid with card ending in 4471."),
+                  judge=judge(outcome_detail="Refund sent; call 555 0194 123 or dana dot w at example dot com."))
+    rec = analyse_call(DATA / "call_005.txt", client, PROMPTS, SETTINGS)
+    text = rec.summary + rec.outcome.detail
+    for leaked in ("Carla", "Mendes", "4471", "0194", "example dot com"):
+        assert leaked not in text
+    assert rec.quality.redactions >= 4
 
 
 def test_invalid_json_is_repaired_on_second_attempt(fake):
-    client = fake("{not json", valid_answer())
+    client = fake(classify=["{not json", classify()])
     rec = analyse_call(DATA / "call_005.txt", client, PROMPTS, SETTINGS)
-    assert rec.status == "ok" and rec.quality.attempts == 2
-    assert "could not be used" in client.calls[1][-1]["content"]  # repair prompt was sent
+    assert rec.status == "ok" and rec.quality.model_requests == 4
+    repair_messages = [m for task, m in client.calls if task == "classify"][1]
+    assert "could not be used" in repair_messages[-1]["content"]
 
 
-def test_wrong_enum_value_fails_validation_then_fails_cleanly(fake):
-    bad = valid_answer(outcome={"status": "kind_of_done", "detail": "x"})
-    rec = analyse_call(DATA / "call_005.txt", fake(bad), PROMPTS, SETTINGS)
+def test_wrong_enum_value_fails_cleanly(fake):
+    rec = analyse_call(DATA / "call_005.txt", fake(judge=judge(sentiment_end="furious")), PROMPTS, SETTINGS)
     assert rec.status == "failed" and rec.needs_review
     assert rec.summary is None and rec.action_items == []
     assert "schema" in rec.error
 
 
 def test_model_timeout_gives_failed_record(fake, model_error):
-    rec = analyse_call(DATA / "call_005.txt", fake(model_error), PROMPTS, SETTINGS)
+    rec = analyse_call(DATA / "call_005.txt", fake(actions=model_error), PROMPTS, SETTINGS)
     assert rec.status == "failed" and "600s" in rec.error
 
 
-def test_contradictions_are_flagged(fake):
-    answer = valid_answer(call_type="test_call")  # but outcome says resolved
-    rec = analyse_call(DATA / "call_004.txt", fake(answer), PROMPTS, SETTINGS)
-    assert rec.needs_review
-    assert any("call_type is test_call" in r for r in rec.review_reasons)
-    assert rec.supervisor_priority == "low"
+def test_flags_come_from_yes_no_answers_and_contradicting_insights_are_dropped(fake):
+    insights = [{"category": "compliance_risk", "text": "Agent guaranteed approval.",
+                 "quote": "I guarantee it, no deductible either"},
+                {"category": "churn_risk", "text": "May leave.", "quote": "Okay, wow. Okay."}]
+    client = fake(judge=judge(agent_overpromised=True), actions=actions(insights=insights))
+    rec = analyse_call(DATA / "call_006.txt", client, PROMPTS, SETTINGS)
+    assert rec.flags.compliance_risk and not rec.flags.churn_risk
+    assert [i.category for i in rec.insights] == ["compliance_risk"]  # churn insight contradicted -> dropped
+    assert any("dropped churn_risk" in c for c in rec.quality.rule_corrections)
+    assert rec.supervisor_priority == "high"
 
 
-def test_phone_numbers_in_free_text_are_flagged(fake):
-    answer = valid_answer(summary="Customer on 555 0194 4471 called.")
-    rec = analyse_call(DATA / "call_005.txt", fake(answer), PROMPTS, SETTINGS)
-    assert any("phone or card" in r for r in rec.review_reasons)
+def test_judge_prompt_shows_the_customers_first_and_last_turns(fake):
+    client = fake()
+    rec = analyse_call(DATA / "call_002.txt", client, PROMPTS, SETTINGS)
+    judge_prompt = [m for task, m in client.calls if task == "judge"][0][1]["content"]
+    assert "I want to cancel my internet" in judge_prompt and "Don't make me call back" in judge_prompt
+    sentiment = [e for e in rec.evidence if e.supports == "sentiment"]
+    assert len(sentiment) == 2 and all(e.verified for e in sentiment)
 
 
-def test_compliance_insight_sets_flag_and_high_priority(fake):
-    answer = valid_answer(insights=[{"category": "compliance_risk", "text": "Agent guaranteed approval.",
-                                     "quote": "I guarantee it, no deductible either"}])
-    rec = analyse_call(DATA / "call_006.txt", fake(answer), PROMPTS, SETTINGS)
-    assert rec.flags.compliance_risk and rec.supervisor_priority == "high"
+def test_text_null_due_dates_become_real_nulls(fake):
+    items = [{"owner": "agent", "task": "Do it", "due": "null"}, {"owner": "customer", "task": "Call", "due": "Monday"}]
+    rec = analyse_call(DATA / "call_005.txt", fake(actions=actions(action_items=items)), PROMPTS, SETTINGS)
+    assert [a.due for a in rec.action_items] == [None, "Monday"]
 
 
 def test_run_never_stops_on_bad_files_and_output_is_consistent(tmp_path, fake, model_error):
@@ -80,13 +118,14 @@ def test_run_never_stops_on_bad_files_and_output_is_consistent(tmp_path, fake, m
     shutil.copy(FIXTURES / "edge" / "messy.txt", folder / "call_b.txt")
     shutil.copy(DATA / "call_005.txt", folder / "call_c.txt")
     out = tmp_path / "out" / "records.json"
-    client = fake(valid_answer(), model_error, model_error)  # b ok, c fails twice
+    # call_b gets good answers; call_c's first task fails twice
+    client = fake(classify=[classify(), model_error, model_error])
     run(folder, out, client, SETTINGS, runtime="test")
 
     data = json.loads(out.read_text())
     OutputFile.model_validate(data)  # whole file matches the published schema
     recs = {r["call_id"]: r for r in data["records"]}
-    assert [r["call_id"] for r in data["records"]] == ["call_a", "call_b", "call_c"]
+    assert list(recs) == ["call_a", "call_b", "call_c"]
     assert recs["call_a"]["status"] == "failed"  # empty file
     assert recs["call_b"]["status"] == "ok" and recs["call_b"]["needs_review"]  # messy lines flagged
     assert recs["call_c"]["status"] == "failed"
@@ -98,7 +137,7 @@ def test_run_never_stops_on_bad_files_and_output_is_consistent(tmp_path, fake, m
 def test_long_transcript_is_truncated_and_flagged(tmp_path, fake):
     path = tmp_path / "call_long.txt"
     path.write_text("\n".join(f"Customer: line {i} " + "words " * 40 for i in range(800)))
-    rec = analyse_call(path, fake(valid_answer()), PROMPTS, SETTINGS)
+    rec = analyse_call(path, fake(), PROMPTS, SETTINGS)
     assert rec.quality.truncated and any("too long" in r for r in rec.review_reasons)
 
 
@@ -109,30 +148,13 @@ def test_cli_rejects_missing_folder_and_remote_servers(tmp_path):
 
 
 def test_prompt_version_changes_when_prompt_changes(tmp_path):
-    for name in ("system.md", "user_template.md", "repair.md", "VERSION"):
-        shutil.copy(PROMPTS_DIR / name, tmp_path / name)
+    for p in PROMPTS_DIR.iterdir():
+        shutil.copy(p, tmp_path / p.name)
     before = Prompts.load(tmp_path).version
-    (tmp_path / "system.md").write_text("changed")
+    (tmp_path / "task_judge.md").write_text("changed")
     assert Prompts.load(tmp_path).version != before
 
 
 def test_published_json_schema_is_up_to_date():
-    from callanalytics.config import REPO_ROOT
-    from callanalytics.schema import OutputFile
-
     published = json.loads((REPO_ROOT / "schema" / "record.schema.json").read_text())
     assert published == OutputFile.model_json_schema(), "run: python -m callanalytics.schema"
-
-
-def test_insights_without_a_real_quote_are_flagged(fake):
-    answer = valid_answer(insights=[{"category": "repeat_contact", "text": "Second call.",
-                                     "quote": "This is the second time I've called"}])
-    rec = analyse_call(DATA / "call_005.txt", fake(answer), PROMPTS, SETTINGS)
-    assert not rec.insights[0].verified
-    assert any("insight quote" in r for r in rec.review_reasons)
-
-
-def test_references_get_one_format_and_duplicates_are_removed(fake):
-    answer = valid_answer(references=[{"type": "refund", "value": "R-F-22068"}, {"type": "refund", "value": "RF22068"}])
-    rec = analyse_call(DATA / "call_005.txt", fake(answer), PROMPTS, SETTINGS)
-    assert [r.value for r in rec.references] == ["RF-22068"] and rec.references[0].verified

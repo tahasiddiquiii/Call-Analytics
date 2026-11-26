@@ -1,4 +1,9 @@
-"""Orchestration: file -> parse -> model -> validate -> ground -> rules -> record -> JSON file."""
+"""Orchestration: file -> parse -> 3 small model tasks -> validate -> check -> rules -> record -> JSON file.
+
+Why three tasks: v2 showed that a 3B model given one long prompt with ten fields ignores many of
+the rules. Each task now asks for a few fields only. The transcript sits in the system message,
+which is identical for all three requests, so Ollama reuses its cached reading of the call.
+"""
 
 import hashlib
 import json
@@ -6,57 +11,82 @@ import logging
 import os
 import tempfile
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Type
 
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 from . import grounding, rules
 from .config import PROMPTS_DIR, SCHEMA_VERSION, Settings
-from .llm import ChatResult, ModelError
+from .llm import ModelError
 from .parser import Transcript, Turn, parse_file
+from .privacy import redact
+from .references import extract_references
 from .schema import (
+    ActionItem,
+    ActionsOut,
     CallRecord,
+    ClassifyOut,
     Evidence,
     InsightRecord,
-    ModelOutput,
+    IntentOut,
+    JudgeOut,
+    OutcomeBasis,
+    OutcomeRecord,
     OutputFile,
     Quality,
     Reference,
     RunInfo,
     SentimentRecord,
-    model_output_json_schema,
 )
 
 log = logging.getLogger("callanalytics")
 
 _OUTPUT_TOKEN_RESERVE = 1800  # room kept free in the context window for the answer
 _CHARS_PER_TOKEN = 3.2  # conservative estimate for English/Hinglish text
+TASKS: List[Tuple[str, Type[BaseModel]]] = [
+    ("classify", ClassifyOut),
+    ("judge", JudgeOut),
+    ("actions", ActionsOut),
+]
 
 
 @dataclass
 class Prompts:
     system: str
-    user_template: str
+    tasks: Dict[str, str]
     repair: str
     version: str
 
     @classmethod
     def load(cls, folder: Path = PROMPTS_DIR) -> "Prompts":
-        system = (folder / "system.md").read_text(encoding="utf-8")
-        user = (folder / "user_template.md").read_text(encoding="utf-8")
-        repair = (folder / "repair.md").read_text(encoding="utf-8")
-        label = (folder / "VERSION").read_text(encoding="utf-8").strip()
-        digest = hashlib.sha256((system + user + repair).encode()).hexdigest()[:8]
+        read = lambda name: (folder / name).read_text(encoding="utf-8")  # noqa: E731
+        system, repair = read("system.md"), read("repair.md")
+        tasks = {name: read(f"task_{name}.md") for name, _ in TASKS}
+        label = read("VERSION").strip()
+        digest = hashlib.sha256("".join([system, repair, *tasks.values()]).encode()).hexdigest()[:8]
         # The hash makes the version honest: any prompt edit changes it, even if the label is not bumped.
-        return cls(system, user, repair, f"{label}-{digest}")
+        return cls(system, tasks, repair, f"{label}-{digest}")
+
+
+@dataclass
+class Usage:
+    requests: int = 0
+    prompt_tokens: int = 0
+    output_tokens: int = 0
+    errors: List[str] = field(default_factory=list)
+
+
+class TaskFailed(Exception):
+    pass
 
 
 def _fit_to_context(t: Transcript, prompts: Prompts, settings: Settings) -> Tuple[List[Turn], bool]:
     """Keep the transcript inside the context window. Very long calls keep their start and end."""
-    budget_chars = int((settings.num_ctx - _OUTPUT_TOKEN_RESERVE) * _CHARS_PER_TOKEN) - len(prompts.system)
+    fixed = len(prompts.system) + max(len(p) for p in prompts.tasks.values())
+    budget_chars = int((settings.num_ctx - _OUTPUT_TOKEN_RESERVE) * _CHARS_PER_TOKEN) - fixed
     if len(t.render()) <= budget_chars:
         return t.turns, False
     head, tail, used = [], [], 0
@@ -65,8 +95,7 @@ def _fit_to_context(t: Transcript, prompts: Prompts, settings: Settings) -> Tupl
         for side, pick in ((head, 0), (tail, -1)):
             if not turns:
                 break
-            turn = turns[pick]
-            size = len(turn.text) + 20
+            size = len(turns[pick].text) + 20
             if used + size > budget_chars:
                 turns = []
                 break
@@ -77,129 +106,157 @@ def _fit_to_context(t: Transcript, prompts: Prompts, settings: Settings) -> Tupl
 
 
 def _validation_errors(exc: ValidationError) -> str:
-    lines = []
-    for e in exc.errors()[:8]:
-        where = ".".join(str(p) for p in e["loc"])
-        lines.append(f"- {where}: {e['msg']}")
-    return "\n".join(lines)
+    return "\n".join(f"- {'.'.join(str(p) for p in e['loc'])}: {e['msg']}" for e in exc.errors()[:8])
 
 
-def _ask_model(client, prompts: Prompts, t: Transcript, turns: List[Turn], settings: Settings):
-    """Ask the model, validate, and repair once if needed. Returns (output, attempts, last ChatResult, error)."""
-    user = prompts.user_template.format(call_id=t.call_id, brand=t.brand or "unknown", transcript=t.render(turns))
-    messages = [{"role": "system", "content": prompts.system}, {"role": "user", "content": user}]
-    schema = model_output_json_schema()
-    error: Optional[str] = None
-    result: Optional[ChatResult] = None
-    for attempt in range(1, settings.max_attempts + 1):
+def _ask(client, system_msg: str, task_prompt: str, model_cls: Type[BaseModel], settings: Settings,
+         usage: Usage, repair_prompt: str):
+    """One task: ask, validate, repair once if needed. Raises TaskFailed."""
+    messages = [{"role": "system", "content": system_msg}, {"role": "user", "content": task_prompt}]
+    schema = model_cls.model_json_schema()
+    error = "no answer"
+    for _ in range(settings.max_attempts):
+        usage.requests += 1
         try:
             result = client.chat(messages, schema)
         except ModelError as exc:
             error = str(exc)
-            log.warning("%s attempt %d: %s", t.call_id, attempt, error)
             continue
+        usage.prompt_tokens += result.prompt_tokens or 0
+        usage.output_tokens += result.output_tokens or 0
         if result.hit_length_limit:
-            error = "answer was cut off at the output length limit"
-            problems = "- the answer was too long and got cut off; keep every text field short"
+            error, problems = "answer was cut off at the output length limit", "- the answer was too long; keep text short"
         else:
             try:
-                return ModelOutput.model_validate_json(result.content), attempt, result, None
+                return model_cls.model_validate_json(result.content)
             except ValidationError as exc:
                 problems = _validation_errors(exc)
-                error = "model answer did not match the schema: " + problems.replace("\n", "; ")
-        log.warning("%s attempt %d invalid, asking for a repair", t.call_id, attempt)
+                error = "answer did not match the schema: " + problems.replace("\n", "; ")
         messages = messages[:2] + [
             {"role": "assistant", "content": result.content},
-            {"role": "user", "content": prompts.repair.format(errors=problems)},
+            {"role": "user", "content": repair_prompt.format(errors=problems)},
         ]
-    return None, settings.max_attempts, result, error
+    raise TaskFailed(error)
+
+
+def _empty_quality() -> Quality:
+    return Quality(turns=0, customer_turns=0, unparsed_lines=0, truncated=False, model_requests=0,
+                   processing_seconds=0.0, prompt_tokens=None, output_tokens=None, redactions=0, rule_corrections=[])
 
 
 def _failed_record(call_id: str, error: str, quality: Quality, brand: Optional[str] = None) -> CallRecord:
     return CallRecord(
-        call_id=call_id, status="failed", error=error, call_type=None, client_brand=brand, summary=None,
-        intent=None, outcome=None, sentiment=None, action_items=[], insights=[], flags=None,
+        call_id=call_id, status="failed", error=error, call_type=None, client_brand=brand, agent_name=None,
+        summary=None, intent=None, outcome=None, sentiment=None, action_items=[], insights=[], flags=None,
         supervisor_priority=None, references=[], evidence=[], needs_review=True,
         review_reasons=[f"analysis failed: {error}"], quality=quality,
     )
 
 
+def _customer_turns(t: Transcript, n: int = 2) -> Tuple[List[Turn], List[Turn]]:
+    """The customer's first and last n turns (they may overlap in short calls)."""
+    own = [x for x in t.turns if x.speaker == "Customer" and x.text.strip(" .")]
+    return own[:n], own[-n:]
+
+
 def analyse_call(path: Path, client, prompts: Prompts, settings: Settings) -> CallRecord:
     started = time.monotonic()
-    empty_quality = Quality(turns=0, customer_turns=0, unparsed_lines=0, truncated=False, attempts=0,
-                            processing_seconds=0.0, prompt_tokens=None, output_tokens=None)
     try:
         t = parse_file(path)
     except OSError as exc:
-        return _failed_record(path.stem, f"could not read file: {exc}", empty_quality)
+        return _failed_record(path.stem, f"could not read file: {exc}", _empty_quality())
 
-    def quality(attempts: int, truncated: bool, result: Optional[ChatResult]) -> Quality:
+    usage = Usage()
+    corrections: List[str] = []
+    redactions = 0
+
+    def quality(truncated: bool) -> Quality:
         return Quality(
             turns=len(t.turns), customer_turns=t.count("Customer"), unparsed_lines=t.unparsed_lines,
-            truncated=truncated, attempts=attempts, processing_seconds=round(time.monotonic() - started, 1),
-            prompt_tokens=result.prompt_tokens if result else None,
-            output_tokens=result.output_tokens if result else None,
+            truncated=truncated, model_requests=usage.requests,
+            processing_seconds=round(time.monotonic() - started, 1),
+            prompt_tokens=usage.prompt_tokens or None, output_tokens=usage.output_tokens or None,
+            redactions=redactions, rule_corrections=corrections,
         )
 
     if not t.turns:
-        return _failed_record(t.call_id, "file has no transcript lines", quality(0, False, None), t.brand)
+        return _failed_record(t.call_id, "file has no transcript lines", quality(False), t.brand)
 
     turns, truncated = _fit_to_context(t, prompts, settings)
-    out, attempts, result, error = _ask_model(client, prompts, t, turns, settings)
-    if out is None:
-        return _failed_record(t.call_id, error or "unknown error", quality(attempts, truncated, result), t.brand)
+    system_msg = prompts.system.format(brand=t.brand or "unknown", transcript=t.render(turns))
+    first, last = _customer_turns(t)
+    judge_prompt = prompts.tasks["judge"].format(
+        first_turns="\n".join(f"[{x.index}] {x.text}" for x in first) or "(the customer said nothing)",
+        last_turns="\n".join(f"[{x.index}] {x.text}" for x in last) or "(the customer said nothing)",
+    )
+    ask = lambda prompt, cls: _ask(client, system_msg, prompt, cls, settings, usage, prompts.repair)  # noqa: E731
+    try:
+        c: ClassifyOut = ask(prompts.tasks["classify"], ClassifyOut)
+        corrections += rules.normalise_non_customer(c)
+        j: JudgeOut = ask(judge_prompt, JudgeOut)
+        non_customer = c.call_type in rules.NON_CUSTOMER
+        a: ActionsOut = ActionsOut(action_items=[], insights=[]) if non_customer else ask(prompts.tasks["actions"], ActionsOut)
+    except TaskFailed as exc:
+        return _failed_record(t.call_id, str(exc), quality(truncated), t.brand)
 
-    # --- checks done by code, not by the model ---
+    # --- everything below is code: checks, rules and privacy ---
+    texts = [x.text for x in t.turns]
+    name = c.customer_name
+
+    def clean(s: str) -> str:
+        nonlocal redactions
+        s, n = redact(s.strip(), name)
+        redactions += n
+        return s
+
     reasons = list(t.warnings)
     if truncated:
         reasons.append("transcript was too long; the middle was not analysed")
-    texts = [x.text for x in t.turns]
-    references, seen = [], set()
-    for ref in out.references:
-        value = grounding.canonical_reference(ref.value)
-        if value in seen:
-            continue
-        seen.add(value)
-        ok = grounding.reference_in_transcript(ref.value, texts)
-        references.append(Reference(type=ref.type, value=value, verified=ok))
-        if not ok:
-            reasons.append(f"reference '{ref.value}' not found in transcript")
-    insights = []
-    for ins in out.insights:
-        insights.append(InsightRecord(**ins.model_dump(), verified=grounding.quote_in_transcript(ins.quote, texts)))
+
+    # sentiment evidence = the exact customer turns the model was shown; outcome evidence = the model's quote
+    evidence = [Evidence(supports="sentiment", turn=x.index, quote=clean(x.text), verified=True)
+                for x in (first[:1] + last[-1:])]
+    turn = grounding.find_quote_turn(j.outcome_quote, t.turns)
+    evidence.append(Evidence(supports="outcome", turn=turn, quote=clean(j.outcome_quote), verified=bool(turn)))
+    if not turn:
+        reasons.append("outcome evidence quote not found word for word")
+
+    flags = rules.derive_flags(c, j)
+    corrections += rules.drop_contradicted_insights(a, flags)
+    insights = [InsightRecord(category=i.category, text=clean(i.text), quote=clean(i.quote),
+                              verified=grounding.quote_in_transcript(i.quote, texts)) for i in a.insights]
     unproven = [i.category for i in insights if not i.verified]
     if unproven:
         reasons.append(f"insight quote not found word for word: {', '.join(unproven)}")
-    evidence = []
-    for ev in out.evidence:
-        turn = grounding.find_quote_turn(ev.quote, t.turns)
-        evidence.append(Evidence(supports=ev.supports, turn=turn or ev.turn, quote=ev.quote, verified=bool(turn)))
-    unverified = sum(1 for e in evidence if not e.verified)
-    if unverified:
-        reasons.append(f"{unverified} of {len(evidence)} evidence quote(s) not found word for word")
-    reasons += rules.consistency_problems(out)
 
-    flags = rules.derive_flags(out)
+    status = rules.outcome_status(c.call_type, j)
+    reasons += rules.consistency_problems(c, status, a)
     return CallRecord(
         call_id=t.call_id,
         status="ok",
         error=None,
-        call_type=out.call_type,
+        call_type=c.call_type,
         client_brand=t.brand,
-        summary=out.summary.strip(),
-        intent=out.intent,
-        outcome=out.outcome,
-        sentiment=SentimentRecord(**out.sentiment.model_dump(),
-                                  trajectory=rules.trajectory(out.sentiment.start, out.sentiment.end)),
-        action_items=out.action_items,
+        agent_name=c.agent_name,
+        summary=clean(c.summary),
+        intent=IntentOut(primary=c.intent.primary, secondary=c.intent.secondary, detail=clean(c.intent.detail)),
+        outcome=OutcomeRecord(
+            status=status, detail=clean(j.outcome_detail),
+            basis=None if c.call_type in rules.NON_CUSTOMER else OutcomeBasis(
+                handed_over=j.handed_over, solution_agreed=j.solution_agreed, needs_future_step=j.needs_future_step),
+        ),
+        sentiment=SentimentRecord(start=j.sentiment_start, end=j.sentiment_end, overall=j.sentiment_overall,
+                                  trajectory=rules.trajectory(j.sentiment_start, j.sentiment_end)),
+        action_items=[ActionItem(owner=x.owner, task=clean(x.task), due=rules.normalise_due(x.due))
+                      for x in a.action_items],
         insights=insights,
         flags=flags,
-        supervisor_priority=rules.priority(out, flags),
-        references=references,
+        supervisor_priority=rules.priority(c.call_type, status, j.sentiment_end, flags),
+        references=[Reference(type=k, value=v, verified=True) for k, v in extract_references(t.turns)],
         evidence=evidence,
         needs_review=bool(reasons),
         review_reasons=reasons,
-        quality=quality(attempts, truncated, result),
+        quality=quality(truncated),
     )
 
 
@@ -229,9 +286,7 @@ def run(input_dir: Path, output_path: Path, client, settings: Settings, runtime:
             record = analyse_call(path, client, prompts, settings)
         except Exception as exc:  # last line of defence: one bad call must never stop the run
             log.exception("%s: unexpected error", path.stem)
-            q = Quality(turns=0, customer_turns=0, unparsed_lines=0, truncated=False, attempts=0,
-                        processing_seconds=0.0, prompt_tokens=None, output_tokens=None)
-            record = _failed_record(path.stem, f"unexpected error: {exc.__class__.__name__}: {exc}", q)
+            record = _failed_record(path.stem, f"unexpected error: {exc.__class__.__name__}: {exc}", _empty_quality())
         records.append(record)
         note = record.status if record.status == "failed" else ("needs review" if record.needs_review else "ok")
         log.info("[%d/%d] %s  %s  %.1fs", n, len(files), record.call_id, note, record.quality.processing_seconds)

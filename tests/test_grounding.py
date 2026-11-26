@@ -37,3 +37,19 @@ def test_canonical_reference_format():
     assert canonical_reference("R-F-22068") == "RF-22068"
     assert canonical_reference("e s c 7812") == "ESC-7812"
     assert canonical_reference("CLM-291-446") == "CLM-291446"
+
+
+def test_spoken_ids_are_extracted_by_code_only_near_case_words():
+    from callanalytics.parser import parse_text
+    from callanalytics.references import extract_references
+
+    t = parse_text("x", "\n".join([
+        "Agent: Can I have your claim number?",
+        "Customer: It's C L M, dash, two nine one, dash, four four six.",
+        "Agent: The escalation reference is E-S-C, seven eight one two.",
+        "Customer: My number is five five five, oh one two nine.",  # phone: no letters, never an ID
+        "Agent: It says N, B, dash, four, one, nine on the router.",  # no case word nearby
+        "Customer: It's B C, uh, B-C-seven-seven-four-one-nine-two, the order.",
+        "Agent: I can refund a 100 dollars.",  # article 'a' is not an ID prefix
+    ]))
+    assert extract_references(t.turns) == [("claim", "CLM-291446"), ("escalation", "ESC-7812"), ("order", "BC-774192")]

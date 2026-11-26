@@ -15,12 +15,13 @@ cd Call-Analytics
 
 # 2. Install Ollama (local model runtime) and download the model (~1.9 GB, once)
 brew install ollama            # or download from https://ollama.com/download
-ollama serve &                 # starts the local server on localhost:11434 (skip if the app is running)
+LLAMA_ARG_CACHE_RAM=1024 ollama serve &   # local server on localhost:11434; the cap keeps RAM bounded (see below)
 ollama pull qwen2.5:3b
 
-# 3. Install the Python code (Python 3.9+)
+# 3. Install the Python code (tested on Python 3.9 and 3.15)
 python3 -m venv .venv
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 
 # 4. Run: one command, any folder of call files
@@ -56,19 +57,28 @@ The client refuses any model server that is not on `localhost`, so the system ca
 ## How it works
 
 ```
-call.txt → 1 parse → 2 model → 3 validate (+1 repair) → 4 check against transcript → 5 rules → record
-           code       local LLM   code                    code                         code
+call.txt → 1 parse → 2 three small model questions → 3 validate (+1 repair each) → 4 checks, rules, privacy → record
+           code       local LLM (shared cached transcript)  code                     code
 ```
 
-1. **Parse** (`callanalytics/parser.py`): splits `Speaker: text` lines into numbered turns, tolerates bad bytes, wrapped lines and unknown speakers (counted, never credited to the customer), reads the client brand from the System greeting.
-2. **Model** (`callanalytics/llm.py`): one request per call. The record's JSON Schema is passed to Ollama, so the model can only produce JSON of the right shape and allowed values.
-3. **Validate** (`callanalytics/schema.py`): Pydantic checks the answer. If it is invalid, the errors are sent back once with `prompts/repair.md`. If it is still invalid, a `status: "failed"` record is written; the run continues.
-4. **Check against the transcript** (`callanalytics/grounding.py`): every reference number must appear in the call (spoken IDs like "R-F-two-two-zero-six-eight" are normalised to `RF22068`), and every evidence quote must appear word for word.
-5. **Rules** (`callanalytics/rules.py`): code derives the flags, the sentiment trajectory and the supervisor priority, and checks for contradictions (e.g. a test call with outcome "resolved"). Any problem sets `needs_review: true` with a plain-English reason.
+1. **Parse** (`callanalytics/parser.py`): splits `Speaker: text` lines into numbered turns. It tolerates bad bytes, wrapped lines and unknown speakers (counted, never credited to the customer) and reads the client brand from the System greeting.
+2. **Three small model questions** (`prompts/task_*.md`), each with its own JSON Schema passed to Ollama, so the model can only answer in the right shape with allowed values:
+   - *classify*: call type, agent name, summary, intent, escalation request (and the customer's name, used only so code can remove it);
+   - *judge*: the customer's first and last words **quoted before** rating sentiment, plus three yes/no facts about the outcome;
+   - *actions*: action items and insights, each insight with a supporting quote (skipped for test calls and wrong numbers).
+   The transcript sits in the system message, identical for all three, so Ollama reuses its cached reading of the call.
+3. **Validate** (`callanalytics/schema.py`): Pydantic checks each answer. If it is invalid, the errors are sent back once with `prompts/repair.md`. If it is still invalid, a `status: "failed"` record is written and the run continues.
+4. **Code does everything that must be exact** (`rules.py`, `references.py`, `grounding.py`, `privacy.py`):
+   - **outcome status** from the three yes/no facts with a fixed rule: not a customer call → `not_applicable`; handed to another team → `escalated`; no accepted solution → `unresolved`; depends on a future step → `resolved_pending_action`; else `resolved`. The facts are kept in `outcome.basis`, so every status can be explained;
+   - **reference numbers** extracted from the transcript by code ("R-F-two-two-zero-six-eight" → `RF-22068`), so they are always real;
+   - **quotes** (evidence and insights) checked word for word against the transcript;
+   - **flags, sentiment trajectory and supervisor priority** by fixed rules;
+   - **personal data** (customer name, titles with surnames, emails, card digits, long numbers) removed from text fields;
+   - any problem sets `needs_review: true` with a plain-English reason.
 
-The model does only what needs language understanding; everything that must be exact is done by code.
+The model does only what needs language understanding; everything that must be exact is done by code. This split came from evaluation: see `docs/iterations.md`.
 
-**Prompts:** every prompt sent to the model is in [`prompts/`](prompts/): `system.md` (instructions, field definitions, one invented example), `user_template.md` (wraps the transcript) and `repair.md` (retry). The version label plus a hash of the prompt files is stored in every output as `prompt_version`.
+**Prompts:** every prompt sent to the model is in [`prompts/`](prompts/): `system.md` (shared rules + the transcript), `task_classify.md`, `task_judge.md`, `task_actions.md` and `repair.md`. The version label plus a hash of the prompt files is stored in every output as `prompt_version`.
 
 ## Output format
 
@@ -93,21 +103,22 @@ Every record has **the same keys in every case**. When `status` is `"failed"`, t
 | `error` | string · null | Why it failed |
 | `call_type` | `customer_service` · `test_call` · `wrong_number` · `abandoned` | Lets supervisors exclude non-customer calls from statistics |
 | `client_brand` | string · null | From the System greeting, by code |
+| `agent_name` | string · null | As the agent introduced themselves; lets supervisors coach individuals |
 | `summary` | string | **(1)** 1–3 sentences |
 | `intent` | `{primary, secondary[], detail}` | **(2)** `primary`/`secondary` from: `appointment_change`, `account_update`, `cancellation_request`, `billing_dispute`, `refund_request`, `order_issue`, `claim_appeal`, `claim_status`, `plan_change_inquiry`, `technical_support`, `general_inquiry`, `non_customer_call`, `other` |
-| `outcome` | `{status, detail}` | **(3)** `status`: `resolved` · `resolved_pending_action` · `escalated` · `unresolved` · `not_applicable` |
+| `outcome` | `{status, detail, basis}` | **(3)** `status`: `resolved` · `resolved_pending_action` · `escalated` · `unresolved` · `not_applicable`, computed by code from `basis` = `{handed_over, solution_agreed, needs_future_step}` (the model's yes/no answers; null for non-customer calls) |
 | `sentiment` | `{start, end, overall, trajectory}` | **(4)** Customer feeling, each `very_negative` … `very_positive`; `trajectory` (`improved`/`stable`/`worsened`) computed by code |
 | `action_items[]` | `{owner, task, due}` | **(5)** `owner`: `agent` · `company` · `customer` · `supervisor`; `due` as spoken in the call or null |
-| `insights[]` | `{category, text}` | **(6)** `category`: `agent_conduct` · `compliance_risk` · `process_gap` · `product_feedback` · `churn_risk` · `repeat_contact` · `data_quality` |
+| `insights[]` | `{category, text, quote, verified}` | **(6)** `quote` proves the insight; `verified` = found word for word by code. `category`: `agent_conduct` · `compliance_risk` · `process_gap` · `product_feedback` · `churn_risk` · `repeat_contact` · `data_quality` |
 | `flags` | `{compliance_risk, churn_risk, repeat_contact, escalation_requested}` booleans | One-click filters; first three derived from insight categories by code |
 | `supervisor_priority` | `high` · `medium` · `low` | Rule (code): **high** = compliance risk, or case still open (unresolved/escalated) with a negative ending; **medium** = churn risk, repeat contact, open case or negative ending; **low** = otherwise, and all non-customer calls |
-| `references[]` | `{type, value, verified}` | Case numbers (order, claim, ticket, refund, escalation, policy); `verified` = found in transcript by code |
-| `evidence[]` | `{supports, turn, quote, verified}` | Short verbatim quotes backing the outcome, sentiment and insights; `verified` = found word for word by code |
+| `references[]` | `{type, value, verified}` | Case numbers (order, claim, ticket, refund, escalation, policy, other) **extracted by code** in one format (`RF-22068`); `verified` is therefore always true |
+| `evidence[]` | `{supports, turn, quote, verified}` | The customer's first and last words (sentiment) and the words that show how the call ended (outcome); `verified` = found word for word by code |
 | `needs_review` | boolean | Set by code when any check fails |
 | `review_reasons[]` | strings | Why |
-| `quality` | `{turns, customer_turns, unparsed_lines, truncated, attempts, processing_seconds, prompt_tokens, output_tokens}` | Monitoring data |
+| `quality` | `{turns, customer_turns, unparsed_lines, truncated, model_requests, processing_seconds, prompt_tokens, output_tokens, redactions, rule_corrections[]}` | Monitoring data: how hard the call was to process and what code changed |
 
-**Privacy:** the prompt tells the model not to copy names, dates of birth, addresses, phone, card or email details into the record; code flags long digit runs in text fields. Evidence quotes are verbatim and may still contain a name.
+**Privacy:** customer data is kept out of text fields in two layers: the prompt asks for none, and code removes the customer's name, titles with surnames, emails, card digits and long numbers (`quality.redactions` counts them). Street addresses have no reliable pattern and rely on the prompt; the evaluator checks them. Agent first names are kept on purpose, for coaching.
 
 ## Project layout
 

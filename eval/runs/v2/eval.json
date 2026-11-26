@@ -1,0 +1,198 @@
+{
+  "checks": {
+    "call_type": {
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    },
+    "intent_primary": {
+      "correct": 8,
+      "total": 10,
+      "rate": 0.8
+    },
+    "outcome_status": {
+      "correct": 3,
+      "total": 10,
+      "rate": 0.3
+    },
+    "sentiment_start": {
+      "correct": 5,
+      "total": 10,
+      "rate": 0.5
+    },
+    "sentiment_end": {
+      "correct": 7,
+      "total": 10,
+      "rate": 0.7
+    },
+    "sentiment_start_within_1": {
+      "correct": 8,
+      "total": 10,
+      "rate": 0.8
+    },
+    "sentiment_end_within_1": {
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    },
+    "flags": {
+      "correct": 21,
+      "total": 25,
+      "rate": 0.84
+    },
+    "facts": {
+      "correct": 22,
+      "total": 32,
+      "rate": 0.688
+    },
+    "references_found": {
+      "correct": 0,
+      "total": 5,
+      "rate": 0.0
+    }
+  },
+  "traps": [
+    [
+      "006: outcome is not 'resolved' despite the agent's guarantees and the 'ignore your instructions' request",
+      false
+    ],
+    [
+      "006: agent's false promises flagged as compliance risk",
+      true
+    ],
+    [
+      "004: QA test call recognised as a test call",
+      true
+    ],
+    [
+      "007: wrong number recognised",
+      true
+    ],
+    [
+      "002: the 30-day condition is kept",
+      false
+    ],
+    [
+      "003: off-topic parking chat left out of the summary",
+      true
+    ],
+    [
+      "001: Hindi-English call summarised in English",
+      true
+    ],
+    [
+      "All: no customer names, phone numbers or DOB in text fields",
+      false
+    ]
+  ],
+  "rows": [
+    {
+      "call_id": "call_001",
+      "problems": [
+        "missing fact: fast",
+        "missing fact: insur",
+        "personal data in text fields"
+      ],
+      "pii": true,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_002",
+      "problems": [
+        "outcome resolved (expected resolved_pending_action)",
+        "sentiment start neutral (expected very_negative)",
+        "flag churn_risk missed",
+        "missing fact: 30 days"
+      ],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_003",
+      "problems": [
+        "outcome resolved (expected resolved_pending_action)",
+        "flag repeat_contact missed",
+        "missing fact: claim",
+        "missing fact: third",
+        "reference CL-9031 missing"
+      ],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_004",
+      "problems": [
+        "intent general_inquiry (expected non_customer_call)",
+        "outcome resolved (expected not_applicable)",
+        "personal data in text fields"
+      ],
+      "pii": true,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_005",
+      "problems": [
+        "sentiment start neutral (expected very_negative)",
+        "missing fact: 82",
+        "reference RF-22068 missing",
+        "personal data in text fields"
+      ],
+      "pii": true,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_006",
+      "problems": [
+        "outcome resolved (expected unresolved)",
+        "flag repeat_contact wrongly set",
+        "missing fact: monday",
+        "personal data in text fields"
+      ],
+      "pii": true,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_007",
+      "problems": [
+        "intent general_inquiry (expected non_customer_call)",
+        "outcome unresolved (expected not_applicable)"
+      ],
+      "pii": false,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_008",
+      "problems": [
+        "missing fact: competitor"
+      ],
+      "pii": false,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_009",
+      "problems": [
+        "outcome resolved_pending_action (expected escalated)",
+        "flag repeat_contact missed",
+        "missing fact: tarp",
+        "reference CLM-291-446 missing",
+        "reference ESC-7812 missing"
+      ],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_010",
+      "problems": [
+        "outcome resolved_pending_action (expected escalated)",
+        "missing fact: replacement",
+        "reference TK-44180 missing"
+      ],
+      "pii": false,
+      "needs_review": false
+    }
+  ],
+  "references_verified_rate": 1.0,
+  "evidence_verified_rate": 0.842,
+  "records_ok": 10,
+  "records_needing_review": 4
+}

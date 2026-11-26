@@ -92,6 +92,17 @@
           ],
           "title": "Client Brand"
         },
+        "agent_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Agent Name"
+        },
         "summary": {
           "anyOf": [
             {
@@ -116,7 +127,7 @@
         "outcome": {
           "anyOf": [
             {
-              "$ref": "#/$defs/OutcomeOut"
+              "$ref": "#/$defs/OutcomeRecord"
             },
             {
               "type": "null"
@@ -208,6 +219,7 @@
         "error",
         "call_type",
         "client_brand",
+        "agent_name",
         "summary",
         "intent",
         "outcome",
@@ -263,6 +275,7 @@
     },
     "Flags": {
       "additionalProperties": false,
+      "description": "From the model's yes/no answers (judge task); always false for non-customer calls.",
       "properties": {
         "compliance_risk": {
           "title": "Compliance Risk",
@@ -386,7 +399,32 @@
       "title": "IntentOut",
       "type": "object"
     },
-    "OutcomeOut": {
+    "OutcomeBasis": {
+      "additionalProperties": false,
+      "description": "Simple yes/no facts. Code turns them into outcome.status with a fixed rule (rules.outcome_status).",
+      "properties": {
+        "handed_over": {
+          "title": "Handed Over",
+          "type": "boolean"
+        },
+        "solution_agreed": {
+          "title": "Solution Agreed",
+          "type": "boolean"
+        },
+        "needs_future_step": {
+          "title": "Needs Future Step",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "handed_over",
+        "solution_agreed",
+        "needs_future_step"
+      ],
+      "title": "OutcomeBasis",
+      "type": "object"
+    },
+    "OutcomeRecord": {
       "additionalProperties": false,
       "properties": {
         "status": {
@@ -403,13 +441,24 @@
         "detail": {
           "title": "Detail",
           "type": "string"
+        },
+        "basis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OutcomeBasis"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
         "status",
-        "detail"
+        "detail",
+        "basis"
       ],
-      "title": "OutcomeOut",
+      "title": "OutcomeRecord",
       "type": "object"
     },
     "Quality": {
@@ -431,8 +480,8 @@
           "title": "Truncated",
           "type": "boolean"
         },
-        "attempts": {
-          "title": "Attempts",
+        "model_requests": {
+          "title": "Model Requests",
           "type": "integer"
         },
         "processing_seconds": {
@@ -460,6 +509,17 @@
             }
           ],
           "title": "Output Tokens"
+        },
+        "redactions": {
+          "title": "Redactions",
+          "type": "integer"
+        },
+        "rule_corrections": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rule Corrections",
+          "type": "array"
         }
       },
       "required": [
@@ -467,10 +527,12 @@
         "customer_turns",
         "unparsed_lines",
         "truncated",
-        "attempts",
+        "model_requests",
         "processing_seconds",
         "prompt_tokens",
-        "output_tokens"
+        "output_tokens",
+        "redactions",
+        "rule_corrections"
       ],
       "title": "Quality",
       "type": "object"
@@ -496,7 +558,7 @@
           "type": "string"
         },
         "verified": {
-          "description": "True if code found this ID in the transcript",
+          "description": "True if found in the transcript (always true: extracted by code)",
           "title": "Verified",
           "type": "boolean"
         }

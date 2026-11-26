@@ -1,8 +1,9 @@
 """Data shapes.
 
-`ModelOutput` is what the language model must return (its JSON Schema is sent to Ollama so the
-model can only produce valid JSON in this shape). `CallRecord` is the final record written to
-outputs/records.json: the model's answer plus fields that code computes and checks.
+`ClassifyOut`, `JudgeOut` and `ActionsOut` are what the language model must return for its three
+small tasks (each JSON Schema is sent to Ollama, so the model can only produce valid JSON in that
+shape). `CallRecord` is the final record written to outputs/records.json: the model's answers plus
+fields that code computes and checks.
 """
 
 from typing import List, Literal, Optional
@@ -47,7 +48,7 @@ class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-# ---------- What the model returns ----------
+# ---------- What the model returns (three small tasks per call) ----------
 
 
 class IntentOut(_Strict):
@@ -56,15 +57,42 @@ class IntentOut(_Strict):
     detail: str
 
 
-class OutcomeOut(_Strict):
-    status: OutcomeStatus
-    detail: str
+class ClassifyOut(_Strict):
+    """Task 1: what kind of call, and what the customer wanted."""
+
+    call_type: CallType
+    agent_name: Optional[str]
+    customer_name: Optional[str]  # used only so code can remove it from the record; never stored
+    summary: str
+    intent: IntentOut
+    customer_requested_escalation: bool
 
 
-class SentimentOut(_Strict):
-    start: Sentiment
-    end: Sentiment
-    overall: Sentiment
+class OutcomeBasis(_Strict):
+    """Simple yes/no facts. Code turns them into outcome.status with a fixed rule (rules.outcome_status)."""
+
+    handed_over: bool
+    solution_agreed: bool
+    needs_future_step: bool
+
+
+class JudgeOut(_Strict):
+    """Task 2: sentiment, outcome facts and flag facts, all as simple labels or yes/no answers.
+
+    Code shows the model the customer's first and last turns, so it rates the actual words.
+    """
+
+    sentiment_start: Sentiment
+    sentiment_end: Sentiment
+    sentiment_overall: Sentiment
+    handed_over: bool
+    solution_agreed: bool
+    needs_future_step: bool
+    agent_overpromised: bool
+    customer_may_leave: bool
+    contacted_before: bool
+    outcome_detail: str
+    outcome_quote: str
 
 
 class ActionItem(_Strict):
@@ -79,53 +107,52 @@ class Insight(_Strict):
     quote: str  # words from the transcript that prove the insight; checked by code
 
 
-class InsightRecord(Insight):
-    verified: bool = Field(description="True if code found the quote word for word in the transcript")
+class ActionsOut(_Strict):
+    """Task 3: follow-up work and supervisor insights."""
 
-
-class ReferenceOut(_Strict):
-    type: ReferenceType
-    value: str
-
-
-class EvidenceOut(_Strict):
-    supports: EvidenceSupports
-    turn: int
-    quote: str
-
-
-class ModelOutput(_Strict):
-    call_type: CallType
-    summary: str
-    intent: IntentOut
-    outcome: OutcomeOut
-    sentiment: SentimentOut
     action_items: List[ActionItem]
     insights: List[Insight]
-    customer_requested_escalation: bool
-    references: List[ReferenceOut]
-    evidence: List[EvidenceOut]
 
 
 # ---------- The final record ----------
 
 
-class SentimentRecord(SentimentOut):
+class OutcomeRecord(_Strict):
+    status: OutcomeStatus
+    detail: str
+    basis: Optional[OutcomeBasis]  # the model's yes/no answers behind the status (null for non-customer calls)
+
+
+class SentimentRecord(_Strict):
+    start: Sentiment
+    end: Sentiment
+    overall: Sentiment
     trajectory: Literal["improved", "stable", "worsened"]
 
 
+class InsightRecord(Insight):
+    verified: bool = Field(description="True if code found the quote word for word in the transcript")
+
+
 class Flags(_Strict):
+    """From the model's yes/no answers (judge task); always false for non-customer calls."""
+
     compliance_risk: bool
     churn_risk: bool
     repeat_contact: bool
     escalation_requested: bool
 
 
-class Reference(ReferenceOut):
-    verified: bool = Field(description="True if code found this ID in the transcript")
+class Reference(_Strict):
+    type: ReferenceType
+    value: str
+    verified: bool = Field(description="True if found in the transcript (always true: extracted by code)")
 
 
-class Evidence(EvidenceOut):
+class Evidence(_Strict):
+    supports: EvidenceSupports
+    turn: int
+    quote: str
     verified: bool = Field(description="True if code found this quote word for word in the transcript")
 
 
@@ -134,10 +161,12 @@ class Quality(_Strict):
     customer_turns: int
     unparsed_lines: int
     truncated: bool
-    attempts: int
+    model_requests: int
     processing_seconds: float
     prompt_tokens: Optional[int]
     output_tokens: Optional[int]
+    redactions: int
+    rule_corrections: List[str]
 
 
 class CallRecord(_Strict):
@@ -148,9 +177,10 @@ class CallRecord(_Strict):
     error: Optional[str]
     call_type: Optional[CallType]
     client_brand: Optional[str]
+    agent_name: Optional[str]
     summary: Optional[str]
     intent: Optional[IntentOut]
-    outcome: Optional[OutcomeOut]
+    outcome: Optional[OutcomeRecord]
     sentiment: Optional[SentimentRecord]
     action_items: List[ActionItem]
     insights: List[InsightRecord]
@@ -181,10 +211,6 @@ class OutputFile(_Strict):
     generated_at: str
     run: RunInfo
     records: List[CallRecord]
-
-
-def model_output_json_schema() -> dict:
-    return ModelOutput.model_json_schema()
 
 
 if __name__ == "__main__":  # python -m callanalytics.schema  -> regenerates schema/record.schema.json

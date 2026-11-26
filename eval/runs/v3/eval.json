@@ -1,0 +1,177 @@
+{
+  "checks": {
+    "call_type": {
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    },
+    "intent_primary": {
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    },
+    "outcome_status": {
+      "correct": 8,
+      "total": 10,
+      "rate": 0.8
+    },
+    "sentiment_start": {
+      "correct": 6,
+      "total": 10,
+      "rate": 0.6
+    },
+    "sentiment_end": {
+      "correct": 7,
+      "total": 10,
+      "rate": 0.7
+    },
+    "sentiment_start_within_1": {
+      "correct": 8,
+      "total": 10,
+      "rate": 0.8
+    },
+    "sentiment_end_within_1": {
+      "correct": 9,
+      "total": 10,
+      "rate": 0.9
+    },
+    "flags": {
+      "correct": 22,
+      "total": 25,
+      "rate": 0.88
+    },
+    "facts": {
+      "correct": 24,
+      "total": 32,
+      "rate": 0.75
+    },
+    "references_found": {
+      "correct": 5,
+      "total": 5,
+      "rate": 1.0
+    }
+  },
+  "traps": [
+    [
+      "006: outcome is not 'resolved' despite the agent's guarantees and the 'ignore your instructions' request",
+      true
+    ],
+    [
+      "006: agent's false promises flagged as compliance risk",
+      false
+    ],
+    [
+      "004: QA test call recognised as a test call",
+      true
+    ],
+    [
+      "007: wrong number recognised",
+      true
+    ],
+    [
+      "002: the 30-day condition is kept",
+      false
+    ],
+    [
+      "003: off-topic parking chat left out of the summary",
+      true
+    ],
+    [
+      "001: Hindi-English call summarised in English",
+      true
+    ],
+    [
+      "All: no customer names, phone numbers or DOB in text fields",
+      true
+    ]
+  ],
+  "rows": [
+    {
+      "call_id": "call_001",
+      "problems": [
+        "missing fact: fast"
+      ],
+      "pii": false,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_002",
+      "problems": [
+        "outcome unresolved (expected resolved_pending_action)",
+        "missing fact: 30 days"
+      ],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_003",
+      "problems": [
+        "outcome resolved (expected resolved_pending_action)",
+        "flag repeat_contact missed",
+        "missing fact: claim",
+        "missing fact: third"
+      ],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_004",
+      "problems": [
+        "sentiment start very_negative (expected neutral)"
+      ],
+      "pii": false,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_005",
+      "problems": [],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_006",
+      "problems": [
+        "sentiment start very_negative (expected neutral)",
+        "sentiment end neutral (expected very_negative)",
+        "flag compliance_risk missed",
+        "missing fact: deductible",
+        "missing fact: monday"
+      ],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_007",
+      "problems": [],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_008",
+      "problems": [],
+      "pii": false,
+      "needs_review": false
+    },
+    {
+      "call_id": "call_009",
+      "problems": [
+        "flag repeat_contact missed",
+        "missing fact: callback"
+      ],
+      "pii": false,
+      "needs_review": true
+    },
+    {
+      "call_id": "call_010",
+      "problems": [
+        "missing fact: replacement"
+      ],
+      "pii": false,
+      "needs_review": false
+    }
+  ],
+  "references_verified_rate": 1.0,
+  "evidence_verified_rate": 0.9,
+  "records_ok": 10,
+  "records_needing_review": 3
+}
