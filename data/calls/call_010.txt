@@ -1,0 +1,38 @@
+System: Thank you for calling Meridian Care on behalf of Nimbus Home Networks technical support. This call may be recorded.
+Agent: Nimbus technical support, this is Ravi. How can I help?
+Customer: Hi, my router keeps dropping the connection every ten, fifteen minutes. I've restarted it like five times.
+Agent: Sorry about that. Let's get you sorted. Can I have the serial number from the sticker on the bottom of the router?
+Customer: Sure, hold on. It says N, B, dash, four, one, nine, uh, nine, eight, seven, two. Maybe, hmm, the last bit is hard to read. Could be a three.
+Agent: Let me repeat. N-B-four-one-nine-nine-eight-seven-three. Did I get that right?
+Customer: No no, it's N B four one nine, then eight nine seven two. Not nine eight.
+Agent: Okay, N-B-four-one-nine-eight-nine-seven-two. Hmm, that serial isn't coming up in the system. Could you check again?
+Customer: Um, I'm holding it up to the light. It's N B four one nine eight nine seven... two? Or it's a Z? I can't tell.
+Agent: Okay, let's skip the serial for now. Can I have your name and the phone number on the account?
+Customer: Name's Greg Halloran. Phone is five five five, oh two... wait, five five five oh two four, uh, seven one. No it's five five five, zero two four, one seven.
+Agent: Sorry, so five five five, zero two four, one seven? That's only seven digits with the area part, I think I'm missing a digit.
+Customer: Hold on. Five five five, zero, two, four, seven, one, that's the old landline. My cell is five five five, zero two seven four. Sorry. I'm getting confused.
+Agent: No worries. Let me try the cell, five five five, zero two seven four.
+Customer: Yeah. I think so.
+Agent: I found an account under Halloran with that number. Let's go ahead. What color are the lights on the router right now?
+Customer: The, uh, the internet light is blinking orange, and the Wi-Fi is solid green.
+Agent: Orange blinking on the internet light means it's losing the upstream signal. Can you check the cable at the back, the coax cable? Make sure it's finger tight.
+Customer: Okay. It's a little loose, I think. Okay, I tightened it. Hold on.
+Agent: Great. Now give it two or three minutes. Let me know whether the light turns solid.
+Customer: Okay. It's solid white now. Oh wait, it's blinking again. Orange, same as before.
+Agent: Hmm. Let's try a factory reset. Press the small reset button with a paperclip for fifteen seconds. Note it will erase your Wi-Fi name and password.
+Customer: I don't want to lose my settings, I just set up the guest network. Is there anything else?
+Agent: We can try changing the channel, but I need to log into the router remotely, and I need the correct serial number for that.
+Customer: Ugh, the serial. Okay, let me use my phone flashlight. N B four one nine, eight nine seven, two. I'm pretty sure it's a two now.
+Agent: Still not matching on my end. Maybe the router is a replacement unit not registered to the account. That could be why.
+Customer: It is a replacement, they sent me one in March, actually.
+Agent: That explains it. The replacement serial may not have been linked. Okay. So here's what I'll do. I can't fix this remotely, so I'll create a ticket for a technician.
+Customer: A technician? Do I have to be home? I work all day.
+Agent: The technician slots are eight to twelve or noon to five. I can set the ticket and the scheduling team will call you to pick a slot.
+Customer: Okay, the call, to which number? The cell?
+Agent: To the cell, five five five, zero two seven four. Is it okay if I note that the landline is also available?
+Customer: Yeah, note both. Ah, but the cell is a better number.
+Agent: Ticket created. The reference is T-K, four four one, eight zero. They should call within two business days.
+Customer: Two days. And in the meantime I just keep it rebooting? It's really annoying, I work from home.
+Agent: Unfortunately yes. If you can, use a wired connection to your laptop, and avoid the factory reset until the technician comes.
+Customer: Fine. Thanks for trying, Ravi.
+Agent: You're welcome, Greg. Sorry I couldn't fix it right now.

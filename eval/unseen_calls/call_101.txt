@@ -1,0 +1,14 @@
+System: Thank you for calling Meridian Care on behalf of Ferngrove Pharmacy. This call may be recorded.
+Agent: Ferngrove Pharmacy, this is Lina speaking. How can I help?
+Customer: Hi. My repeat prescription was supposed to be ready yesterday but the shop says they never got it from the doctor.
+Agent: I'm sorry about that. Can I have your name and date of birth?
+Customer: Arjun Mehta, second of July, nineteen ninety.
+Agent: Thank you. I can see the request was sent to the clinic on Monday, but there's no approval back yet.
+Customer: This is the second month in a row. I only have two tablets left. It's blood pressure medicine, I can't just skip it.
+Agent: I understand, that's important. I'll mark the request as urgent and call the clinic myself this afternoon. If they approve it, it'll be ready by six p.m. today.
+Customer: And if they don't approve it today?
+Agent: Then the pharmacist can give you an emergency supply of up to five days. You'd just need to come in with ID.
+Customer: Okay. That's a relief, honestly. Will you text me?
+Agent: Yes, you'll get a text as soon as it's ready. Your reference is P-R, six one two zero.
+Customer: P R six one two zero. Thank you, Lina.
+Agent: You're welcome. Take care.

@@ -1,0 +1,8 @@
+System: Thank you for calling Meridian Care. Please hold while we connect you.
+Agent: Hello, Meridian Care, who am I speaking with?
+Customer: ...
+Agent: Hello? Can you hear me?
+Customer: Uh, who is this? I was trying to call the pharmacy, I think I dialed wrong. Hello?
+Agent: This is a customer care line, I don't think we're the pharmacy. What number were you trying to reach?
+Customer: ...never mind, sorry.
+System: The caller has disconnected.

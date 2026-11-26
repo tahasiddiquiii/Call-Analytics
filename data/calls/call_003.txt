@@ -1,0 +1,53 @@
+System: Thank you for calling Meridian Care on behalf of Brightcart. Your call may be monitored or recorded.
+Agent: Brightcart customer care, this is Elena. How can I help you today?
+Customer: Hi, yeah, uh, my order never came. It says delivered like nine days ago but there's nothing at my door.
+Agent: I'm sorry about that. Can I get the order number please?
+Customer: It's B C, uh, B-C-seven-seven-four-one-nine-two. Or maybe, hold on, seven seven four one nine two, yeah.
+Agent: Thank you. And your name?
+Customer: Tom Alvarez. Tom with an H, no, no H. T-O-M.
+Agent: Thanks, Tom. I see the order, a pair of trail running shoes and a water bottle, total eighty-eight dollars forty. Carrier marked it delivered on the eighth at two fifteen p.m., signature not required.
+Customer: Right, so that's my point. Nobody left anything. I checked the porch, the neighbors, the mailroom. Nothing.
+Agent: Understood. Did you check around the side door or with anyone else in the household?
+Customer: My wife works from home, she says nothing came. We have a camera too, and there's no one on it at two fifteen.
+Agent: Okay. Thank you for checking all that. Given that, I can offer either a full refund or send a replacement. Which would you prefer?
+Customer: Honestly I don't know. I kind of need the shoes, I've got a trail race in three weeks.
+Agent: Then a replacement might be the better option, as long as the size is in stock. What size were they?
+Customer: Eleven, wide. The, uh, the slate gray color.
+Agent: Let me check. Slate gray size eleven wide is in stock at our east warehouse. Standard shipping would be four to six business days.
+Customer: Four to six, hmm. That's cutting it close to the race. Can it be expedited?
+Agent: Expedited shipping is two days, normally twelve dollars, but because the original was lost I can waive that fee.
+Customer: Okay that's good. But wait, what if the replacement gets lost too? Then I've got neither.
+Agent: That's a fair concern. I can flag the replacement with a signature requirement so the carrier has to hand it to someone.
+Customer: But I'm not home all day on Thursdays. See, my shifts, I do the rotating thing at the hospital, so Thursdays and Fridays I'm out till six.
+Agent: Then I could set it to be held at a pickup locker. We have a locker network, there's one at the grocery store on Fifth Street if that's near you.
+Customer: Oh, funny, that's right near the... you know, speaking of, that grocery store, they changed their parking, did you hear? It's a total nightmare now. They put in this paid parking thing with an app.
+Agent: I haven't heard, sorry to hear that, that sounds annoying.
+Customer: And the app doesn't even work with my phone, I had to download two different ones. It took me twenty minutes just to buy groceries last week. My wife said I should just boycott the place.
+Agent: That does sound like a headache. Would you rather have the locker at a different location, then?
+Customer: No no, the locker's fine, I don't mind parking for two minutes. Anyway, sorry, I rambled. So what's the plan again?
+Agent: No problem at all. Two options, the replacement with expedited shipping to the Fifth Street locker with signature, or a full refund to your original card.
+Customer: Hmm, the thing is, if I take the refund I'd have to buy them again, and the price went up, I looked. They're ninety-four now.
+Agent: Right, so refund would be eighty-eight forty, and you'd lose that difference. The replacement keeps your original price.
+Customer: Okay, replacement it is. But can I ask, what happens if the original suddenly shows up? Do I have to send it back?
+Agent: If both arrive, you can keep one pair and return the other with a prepaid label, or we simply ask that you notify us. I'll note that on the order.
+Customer: Fine. And I don't want to get charged for the second one.
+Agent: You won't. The replacement is processed at zero dollars, linked to the original order. Nothing will be charged.
+Customer: Okay. And are you going to investigate the carrier? Because this is the third time something went missing from them this year.
+Agent: Yes, I'll file a delivery claim against the carrier today so that the incident is logged. I'm also adding a comment that this is a repeat issue for your address.
+Customer: Good. Because last time nobody did anything about it.
+Agent: I understand. I'll make sure this one has a reference number. It will be, uh, claim C-L-nine-oh-three-one.
+Customer: Nine oh three one, got it. Can you repeat the locker thing? I want to make sure it's the Fifth Street one.
+Agent: Sure. Locker at the Fifth Street grocery store, you'll get a text with a pickup code when it arrives, and you have three days to collect.
+Customer: Three days. Okay. Not a problem. And the code goes to my phone, which number do you have?
+Agent: I have five five five, zero one six six on file. Is that still correct?
+Customer: Oh no, that's my old number. It's five five five, zero one eight eight now.
+Agent: Updated to five five five, zero one eight eight. Thank you.
+Customer: Perfect. So when will I see it?
+Agent: Expedited from the east warehouse ships tomorrow morning, so you should have the locker text by Thursday evening, Friday at the latest.
+Customer: Friday at the latest, okay. That works with my race. Honestly, I was getting pretty annoyed at the start, but this is fine.
+Agent: I appreciate your patience, Tom. You will receive a confirmation email with the new order reference in a few minutes.
+Customer: Great. Anything else I need to do?
+Agent: Just keep an eye out for the text, and let us know if it doesn't arrive by Friday. We will then escalate to a refund on the spot.
+Customer: Okay, that's a good backstop. Thanks, Elena.
+Agent: Thank you for calling Brightcart, Tom. Good luck with the race.
+Customer: Ha, thanks. Bye.

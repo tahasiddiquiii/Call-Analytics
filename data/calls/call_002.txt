@@ -1,0 +1,19 @@
+System: Thank you for calling Meridian Care on behalf of Skyline Broadband. This call may be recorded.
+Agent: Skyline Broadband, this is Marcus, how can I help?
+Customer: Yeah hi, uh, I want to cancel my internet. Like, today. I'm done.
+Agent: I'm sorry to hear that. Can I ask your name and the account phone number?
+Customer: Dana Whitfield. Number is five five five, oh one three seven.
+Agent: Thanks, Dana. Before I process anything, may I ask what's driving the cancellation?
+Customer: It's the price. My bill went from forty-five to sixty-nine dollars, and the speed drops every night around eight. I'm paying more for worse. A competitor offered me fifty a month.
+Agent: That's frustrating, and I understand. You've been with us for four years, which we really value. Let me look at what I can do on the account.
+Customer: Look, I don't want a lecture, I just want it cancelled.
+Agent: Understood, I'm not going to stall you. But there is a loyalty rate I'm allowed to offer. I can bring you to fifty-two dollars a month for twelve months, and I can open a line-quality check on the evening slowdown at no charge.
+Customer: Fifty-two. The other guys said fifty flat.
+Agent: I hear you. The fifty-two includes the router rental, which is eight dollars at the competitor usually. So effectively you'd be ahead.
+Customer: Hmm. Is that, like, locked in? Because last time they said the promo price and then it jumped after three months.
+Agent: Fair question. The rate is locked for twelve months in writing, and I will email you the confirmation. After that it would revert to standard pricing, and I would flag a reminder note.
+Customer: And the speed thing? If it still drops at night I'm gone, no questions.
+Agent: Agreed, and if it's not fixed within thirty days you can cancel with no early termination fee. I'll note that on the account.
+Customer: Okay, okay. I'll take it, but only if the slowdown actually gets fixed. And I want the email tonight.
+Agent: Absolutely. I'm applying the fifty-two dollar rate now, scheduling the line check for Thursday, and sending the confirmation to dana dot w at example dot com.
+Customer: Yeah that's the one. Fine. Thanks, I guess. Don't make me call back.

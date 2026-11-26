@@ -1,0 +1,657 @@
+{
+  "$defs": {
+    "ActionItem": {
+      "additionalProperties": false,
+      "properties": {
+        "owner": {
+          "enum": [
+            "agent",
+            "company",
+            "customer",
+            "supervisor"
+          ],
+          "title": "Owner",
+          "type": "string"
+        },
+        "task": {
+          "title": "Task",
+          "type": "string"
+        },
+        "due": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Due"
+        }
+      },
+      "required": [
+        "owner",
+        "task",
+        "due"
+      ],
+      "title": "ActionItem",
+      "type": "object"
+    },
+    "CallRecord": {
+      "additionalProperties": false,
+      "description": "One record per call file. Every key is always present; analysis fields are null when status='failed'.",
+      "properties": {
+        "call_id": {
+          "title": "Call Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error"
+        },
+        "call_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "customer_service",
+                "test_call",
+                "wrong_number",
+                "abandoned"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Call Type"
+        },
+        "client_brand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Client Brand"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Summary"
+        },
+        "intent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IntentOut"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OutcomeOut"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sentiment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SentimentRecord"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action_items": {
+          "items": {
+            "$ref": "#/$defs/ActionItem"
+          },
+          "title": "Action Items",
+          "type": "array"
+        },
+        "insights": {
+          "items": {
+            "$ref": "#/$defs/InsightRecord"
+          },
+          "title": "Insights",
+          "type": "array"
+        },
+        "flags": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Flags"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "supervisor_priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Supervisor Priority"
+        },
+        "references": {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "title": "References",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "needs_review": {
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "review_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Review Reasons",
+          "type": "array"
+        },
+        "quality": {
+          "$ref": "#/$defs/Quality"
+        }
+      },
+      "required": [
+        "call_id",
+        "status",
+        "error",
+        "call_type",
+        "client_brand",
+        "summary",
+        "intent",
+        "outcome",
+        "sentiment",
+        "action_items",
+        "insights",
+        "flags",
+        "supervisor_priority",
+        "references",
+        "evidence",
+        "needs_review",
+        "review_reasons",
+        "quality"
+      ],
+      "title": "CallRecord",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "supports": {
+          "enum": [
+            "intent",
+            "outcome",
+            "sentiment",
+            "insight"
+          ],
+          "title": "Supports",
+          "type": "string"
+        },
+        "turn": {
+          "title": "Turn",
+          "type": "integer"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "description": "True if code found this quote word for word in the transcript",
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "supports",
+        "turn",
+        "quote",
+        "verified"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Flags": {
+      "additionalProperties": false,
+      "properties": {
+        "compliance_risk": {
+          "title": "Compliance Risk",
+          "type": "boolean"
+        },
+        "churn_risk": {
+          "title": "Churn Risk",
+          "type": "boolean"
+        },
+        "repeat_contact": {
+          "title": "Repeat Contact",
+          "type": "boolean"
+        },
+        "escalation_requested": {
+          "title": "Escalation Requested",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "compliance_risk",
+        "churn_risk",
+        "repeat_contact",
+        "escalation_requested"
+      ],
+      "title": "Flags",
+      "type": "object"
+    },
+    "InsightRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "agent_conduct",
+            "compliance_risk",
+            "process_gap",
+            "product_feedback",
+            "churn_risk",
+            "repeat_contact",
+            "data_quality"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "description": "True if code found the quote word for word in the transcript",
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "category",
+        "text",
+        "quote",
+        "verified"
+      ],
+      "title": "InsightRecord",
+      "type": "object"
+    },
+    "IntentOut": {
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "enum": [
+            "appointment_change",
+            "account_update",
+            "cancellation_request",
+            "billing_dispute",
+            "refund_request",
+            "order_issue",
+            "claim_appeal",
+            "claim_status",
+            "plan_change_inquiry",
+            "technical_support",
+            "general_inquiry",
+            "non_customer_call",
+            "other"
+          ],
+          "title": "Primary",
+          "type": "string"
+        },
+        "secondary": {
+          "items": {
+            "enum": [
+              "appointment_change",
+              "account_update",
+              "cancellation_request",
+              "billing_dispute",
+              "refund_request",
+              "order_issue",
+              "claim_appeal",
+              "claim_status",
+              "plan_change_inquiry",
+              "technical_support",
+              "general_inquiry",
+              "non_customer_call",
+              "other"
+            ],
+            "type": "string"
+          },
+          "title": "Secondary",
+          "type": "array"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "primary",
+        "secondary",
+        "detail"
+      ],
+      "title": "IntentOut",
+      "type": "object"
+    },
+    "OutcomeOut": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "resolved",
+            "resolved_pending_action",
+            "escalated",
+            "unresolved",
+            "not_applicable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "detail"
+      ],
+      "title": "OutcomeOut",
+      "type": "object"
+    },
+    "Quality": {
+      "additionalProperties": false,
+      "properties": {
+        "turns": {
+          "title": "Turns",
+          "type": "integer"
+        },
+        "customer_turns": {
+          "title": "Customer Turns",
+          "type": "integer"
+        },
+        "unparsed_lines": {
+          "title": "Unparsed Lines",
+          "type": "integer"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "attempts": {
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "processing_seconds": {
+          "title": "Processing Seconds",
+          "type": "number"
+        },
+        "prompt_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Prompt Tokens"
+        },
+        "output_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Output Tokens"
+        }
+      },
+      "required": [
+        "turns",
+        "customer_turns",
+        "unparsed_lines",
+        "truncated",
+        "attempts",
+        "processing_seconds",
+        "prompt_tokens",
+        "output_tokens"
+      ],
+      "title": "Quality",
+      "type": "object"
+    },
+    "Reference": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "order",
+            "claim",
+            "ticket",
+            "refund",
+            "escalation",
+            "policy",
+            "other"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "verified": {
+          "description": "True if code found this ID in the transcript",
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "value",
+        "verified"
+      ],
+      "title": "Reference",
+      "type": "object"
+    },
+    "RunInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "runtime": {
+          "title": "Runtime",
+          "type": "string"
+        },
+        "device": {
+          "const": "cpu",
+          "title": "Device",
+          "type": "string"
+        },
+        "prompt_version": {
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "input_dir": {
+          "title": "Input Dir",
+          "type": "string"
+        },
+        "calls_total": {
+          "title": "Calls Total",
+          "type": "integer"
+        },
+        "calls_ok": {
+          "title": "Calls Ok",
+          "type": "integer"
+        },
+        "calls_failed": {
+          "title": "Calls Failed",
+          "type": "integer"
+        },
+        "calls_needing_review": {
+          "title": "Calls Needing Review",
+          "type": "integer"
+        },
+        "total_seconds": {
+          "title": "Total Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "runtime",
+        "device",
+        "prompt_version",
+        "input_dir",
+        "calls_total",
+        "calls_ok",
+        "calls_failed",
+        "calls_needing_review",
+        "total_seconds"
+      ],
+      "title": "RunInfo",
+      "type": "object"
+    },
+    "SentimentRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "enum": [
+            "very_negative",
+            "negative",
+            "neutral",
+            "positive",
+            "very_positive"
+          ],
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "enum": [
+            "very_negative",
+            "negative",
+            "neutral",
+            "positive",
+            "very_positive"
+          ],
+          "title": "End",
+          "type": "string"
+        },
+        "overall": {
+          "enum": [
+            "very_negative",
+            "negative",
+            "neutral",
+            "positive",
+            "very_positive"
+          ],
+          "title": "Overall",
+          "type": "string"
+        },
+        "trajectory": {
+          "enum": [
+            "improved",
+            "stable",
+            "worsened"
+          ],
+          "title": "Trajectory",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "overall",
+        "trajectory"
+      ],
+      "title": "SentimentRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "run": {
+      "$ref": "#/$defs/RunInfo"
+    },
+    "records": {
+      "items": {
+        "$ref": "#/$defs/CallRecord"
+      },
+      "title": "Records",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "generated_at",
+    "run",
+    "records"
+  ],
+  "title": "OutputFile",
+  "type": "object"
+}

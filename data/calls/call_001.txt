@@ -1,0 +1,26 @@
+System: This call may be recorded for quality and training purposes. Thank you for calling Meridian Care on behalf of Lakeview Family Clinic.
+Agent: Thank you for calling Lakeview Family Clinic, this is Neha speaking. How can I help you today?
+Customer: Hello, haan, hi Neha. Mera naam Rakesh Verma hai. Mujhe, uh, my appointment reschedule karni hai, please.
+Agent: Sure, Mr. Verma. Can I have your date of birth to pull up your record?
+Customer: Fifteen March, nineteen eighty... eighty-four. Ya wait, nineteen eighty-four, haan.
+Agent: Thank you. I see an appointment with Dr. Iyer this Thursday at ten thirty in the morning. Is that the one?
+Customer: Haan wahi wala. Thursday ko mujhe office mein ek meeting aa gayi hai, toh main nahi aa paunga. Can we do, um, next week?
+Agent: Of course. Dr. Iyer has Tuesday at eleven or Wednesday at four in the afternoon next week. Which works better?
+Customer: Tuesday theek rahega, eleven baje. But kya wo fasting wala test hai? Pichli baar nurse ne kuch bola tha blood test ke baare mein.
+Agent: Let me check the notes. Yes, the doctor ordered a fasting blood sugar and lipid panel. So please do not eat for eight hours before, water is fine.
+Customer: Okay okay, toh subah kuch nahi khana. Samajh gaya. Eight hours, theek hai.
+Agent: Great. I have moved you to Tuesday at eleven with Dr. Iyer. You will get a text confirmation shortly.
+Customer: Ek aur cheez bhi hai. Main ghar shift kar gaya hoon, so my address also change karna hai. Can you do that on this call?
+Agent: Yes, I can update that. What is the new address?
+Customer: Flat four hundred two, Palm Residency, uh, Greenfield Road. Pin code is five zero zero, no wait, five double zero one four.
+Agent: Let me repeat that. Flat 402, Palm Residency, Greenfield Road, postal code 50014. Is that right?
+Customer: Haan haan, fifty thousand fourteen, correct. City wahi hai, Brookfield.
+Agent: Thank you. And do you want the old address kept on file for billing, or replaced everywhere?
+Customer: Replace everywhere kar do. Old wala bilkul hata do, please.
+Agent: Done. I have replaced it on your patient profile and billing profile. Insurance records are managed separately, so you may want to inform your insurer yourself.
+Customer: Oh, accha. Insurance wale ko main khud bata dunga. Thank you for telling.
+Agent: Would you like the appointment reminder sent to the same mobile number, five five five, zero one four two?
+Customer: Haan same number. Aur ek second, kya reminder ek din pehle aa sakta hai? Kabhi kabhi main bhool jaata hoon.
+Agent: Yes, I will set a reminder for Monday evening as well as the morning of the visit.
+Customer: Bahut badhiya. Thank you, Neha, you were very helpful.
+Agent: My pleasure, Mr. Verma. Remember, no food for eight hours before Tuesday at eleven. Have a good day.

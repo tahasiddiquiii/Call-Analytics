@@ -1,0 +1,5 @@
+# Tests, benchmark and slide generation (not needed to run the system)
+-r requirements.txt
+pytest==9.2.0
+psutil==7.2.2
+python-pptx==1.0.2

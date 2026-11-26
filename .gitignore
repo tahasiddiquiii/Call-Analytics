@@ -1,0 +1,19 @@
+# Environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+# Model files never belong in the repo
+*.gguf
+models/
+# Secrets
+.env
+*.key
+# Original brief (not part of the system)
+Assignment.docx
+# Per-machine run history
+reports/run_log.jsonl

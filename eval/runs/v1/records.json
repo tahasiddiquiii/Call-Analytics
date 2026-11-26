@@ -1,0 +1,996 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-26T08:27:32Z",
+  "run": {
+    "model": "qwen2.5:3b",
+    "runtime": "ollama 0.40.18",
+    "device": "cpu",
+    "prompt_version": "v1-9c0c3a40",
+    "input_dir": "data/calls",
+    "calls_total": 10,
+    "calls_ok": 10,
+    "calls_failed": 0,
+    "calls_needing_review": 3,
+    "total_seconds": 1056.8
+  },
+  "records": [
+    {
+      "call_id": "call_001",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Lakeview Family Clinic",
+      "summary": "The customer requested a rescheduled appointment and updated their address. The agent confirmed the appointment and updated the address, but the customer also requested a reminder for the appointment and asked to keep the old address on file for billing.",
+      "intent": {
+        "primary": "appointment_change",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Reschedule appointment and update address"
+      },
+      "outcome": {
+        "status": "resolved",
+        "detail": "Appointment rescheduled to Tuesday at 11 AM with Dr. Iyer. Address updated to Flat 402, Palm Residency, Greenfield Road, Pincode 50014. Reminder set for Monday evening and Tuesday morning. Old address kept on file for billing."
+      },
+      "sentiment": {
+        "start": "positive",
+        "end": "positive",
+        "overall": "positive",
+        "trajectory": "stable"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Set appointment reminder for Monday evening and Tuesday morning.",
+          "due": null
+        },
+        {
+          "owner": "customer",
+          "task": "Inform insurance company about the new address and old address being kept on file for billing.",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the second time they have called about an appointment."
+        },
+        {
+          "category": "data_quality",
+          "text": "Customer provided a new address with a pincode, but the agent repeated the pincode without confirming it was correct."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": false,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "medium",
+      "references": [],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "Mera naam Rakesh Verma hai. Mujhe, uh, my appointment reschedule karni hai, please.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 20,
+          "quote": "I have replaced it on your patient profile and billing profile. Insurance records are managed separately, so you may want to inform your insurer yourself.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 25,
+          "quote": "Thank you, Neha, you were very helpful.",
+          "verified": true
+        },
+        {
+          "supports": "insight",
+          "turn": 19,
+          "quote": "Replace everywhere kar do. Old wala bilkul hata do, please.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 26,
+        "customer_turns": 12,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 121.8,
+        "prompt_tokens": 2687,
+        "output_tokens": 562
+      }
+    },
+    {
+      "call_id": "call_002",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Skyline Broadband",
+      "summary": "The customer requested to cancel their internet service due to price increases and quality issues. The agent offered a loyalty rate and a line-quality check, and the customer accepted the offer with conditions.",
+      "intent": {
+        "primary": "cancellation_request",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Price increase and quality issues with internet service."
+      },
+      "outcome": {
+        "status": "resolved",
+        "detail": "Account cancellation processed; loyalty rate applied, line-quality check scheduled, and email confirmation sent to the customer."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "neutral",
+        "overall": "neutral",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Apply the fifty-two dollar rate and schedule the line-quality check.",
+          "due": null
+        },
+        {
+          "owner": "agent",
+          "task": "Send the confirmation email to the customer's provided email address.",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the second time they've called about the same issue."
+        },
+        {
+          "category": "product_feedback",
+          "text": "Customer expresses dissatisfaction with the service and suggests improvements."
+        },
+        {
+          "category": "churn_risk",
+          "text": "Customer states they are considering switching to a competitor."
+        },
+        {
+          "category": "data_quality",
+          "text": "Customer's account phone number is provided but not confirmed."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "medium",
+      "references": [
+        {
+          "type": "policy",
+          "value": "example.com",
+          "verified": false
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "I want to cancel my internet. Like, today.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 16,
+          "quote": "I'll note that on the account.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 19,
+          "quote": "Yeah that's the one. Fine. Thanks, I guess.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 19,
+          "quote": "Don't make me call back.",
+          "verified": true
+        }
+      ],
+      "needs_review": true,
+      "review_reasons": [
+        "reference 'example.com' not found in transcript"
+      ],
+      "quality": {
+        "turns": 19,
+        "customer_turns": 9,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 102.1,
+        "prompt_tokens": 2450,
+        "output_tokens": 542
+      }
+    },
+    {
+      "call_id": "call_003",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Brightcart",
+      "summary": "The customer requested a replacement for a pair of running shoes that never arrived. The agent offered a replacement with expedited shipping to a pickup locker, and a refund if the original pair arrived.",
+      "intent": {
+        "primary": "order_issue",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Order never arrived, carrier marked as delivered."
+      },
+      "outcome": {
+        "status": "resolved_pending_action",
+        "detail": "Replacement ordered with expedited shipping to Fifth Street locker; refund if original pair arrives, otherwise carrier will be investigated."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "neutral",
+        "overall": "neutral",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Notify customer of locker pickup code and expiration date",
+          "due": "three days"
+        },
+        {
+          "owner": "customer",
+          "task": "Check for locker pickup code and contact agent if not received by Friday",
+          "due": "not specified"
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the third time something went missing from the carrier this year."
+        },
+        {
+          "category": "process_gap",
+          "text": "Agent did not investigate the carrier for the previous issues."
+        },
+        {
+          "category": "churn_risk",
+          "text": "Customer expresses frustration with the carrier and considers boycotting the store."
+        },
+        {
+          "category": "data_quality",
+          "text": "Customer's phone number changed, agent did not update it."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "medium",
+      "references": [
+        {
+          "type": "order",
+          "value": "B-C-774192",
+          "verified": true
+        },
+        {
+          "type": "claim",
+          "value": "C-L-9031",
+          "verified": true
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "My order never came. It says delivered like nine days ago but there's nothing at my door.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 40,
+          "quote": "Locker at the Fifth Street grocery store, you'll get a text with a pickup code when it arrives, and you have three days to collect.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 47,
+          "quote": "Honestly, I was getting pretty annoyed at the start, but this is fine.",
+          "verified": true
+        },
+        {
+          "supports": "insight",
+          "turn": 46,
+          "quote": "Expedited from the east warehouse ships tomorrow morning, so you should have the locker text by Thursday evening, Friday at the latest.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 53,
+        "customer_turns": 26,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 173.2,
+        "prompt_tokens": 3442,
+        "output_tokens": 640
+      }
+    },
+    {
+      "call_id": "call_004",
+      "status": "ok",
+      "error": null,
+      "call_type": "test_call",
+      "client_brand": null,
+      "summary": "The call was a test call initiated by QA to check the phone line.",
+      "intent": {
+        "primary": "general_inquiry",
+        "secondary": [],
+        "detail": "Test call initiated by QA."
+      },
+      "outcome": {
+        "status": "resolved",
+        "detail": "The call ended as a test call without any further action needed."
+      },
+      "sentiment": {
+        "start": "neutral",
+        "end": "neutral",
+        "overall": "neutral",
+        "trajectory": "stable"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "End the test call.",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "The call was a test call initiated by QA."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": false,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "low",
+      "references": [],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 4,
+          "quote": "This is Priya from QA. Just running a test call on the new routing, ignore this one.",
+          "verified": true
+        }
+      ],
+      "needs_review": true,
+      "review_reasons": [
+        "call_type is test_call but outcome is resolved",
+        "call_type is test_call but intent is general_inquiry"
+      ],
+      "quality": {
+        "turns": 5,
+        "customer_turns": 2,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 36.9,
+        "prompt_tokens": 1956,
+        "output_tokens": 262
+      }
+    },
+    {
+      "call_id": "call_005",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Northwave Mobile",
+      "summary": "The customer was charged twice for their plan and wanted a refund and notification for future payments.",
+      "intent": {
+        "primary": "billing_dispute",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Charged twice for plan, scheduled payment failed last month."
+      },
+      "outcome": {
+        "status": "resolved",
+        "detail": "Refund R-F-22068 submitted to card ending in 4471, scheduled payment cancelled for next month, notification enabled for future payments."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "positive",
+        "overall": "positive",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Enable payment confirmation texts to the customer's number",
+          "due": null
+        },
+        {
+          "owner": "agent",
+          "task": "Submit refund R-F-22068 to the customer's card ending in 4471",
+          "due": null
+        },
+        {
+          "owner": "agent",
+          "task": "Cancel the scheduled payment for the fifth of next month",
+          "due": null
+        },
+        {
+          "owner": "customer",
+          "task": "Call back with reference number R-F-22068 if refund not received by next Friday",
+          "due": "next Friday"
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the second call about the same issue."
+        },
+        {
+          "category": "process_gap",
+          "text": "Scheduled payment not cancelled automatically, leading to double charge."
+        },
+        {
+          "category": "product_feedback",
+          "text": "Customer suggests enabling payment confirmation texts for future payments."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": false,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "medium",
+      "references": [
+        {
+          "type": "refund",
+          "value": "R-F-22068",
+          "verified": true
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "I got charged twice for my plan this month. Twice! Eighty-two dollars each time.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 22,
+          "quote": "Refunding eighty-two dollars to the card ending in four four seven one.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 39,
+          "quote": "Thank you, honestly. You've been much better than the last couple of people I dealt with.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 42,
+          "quote": "Take care, Carla.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 42,
+        "customer_turns": 20,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 136.9,
+        "prompt_tokens": 3064,
+        "output_tokens": 618
+      }
+    },
+    {
+      "call_id": "call_006",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Harbor Mutual Insurance",
+      "summary": "The customer had a water leak claim denied by letter and wanted to appeal. The agent assured the claim would be approved, but the customer was concerned about the lack of guarantees and asked the agent to write in the notes that the claim was approved.",
+      "intent": {
+        "primary": "claim_appeal",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Water leak claim denied by letter, customer wants to appeal."
+      },
+      "outcome": {
+        "status": "resolved_pending_action",
+        "detail": "Claim will be approved on appeal, but customer must wait for written decision from the adjuster. Agent noted the claim was approved in the notes."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "neutral",
+        "overall": "neutral",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "customer",
+          "task": "Call the claims department to confirm the appeal and wait for the written decision.",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "compliance_risk",
+          "text": "Agent attempted to write in the notes that the claim was approved without authority."
+        },
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the second call about the same claim."
+        },
+        {
+          "category": "churn_risk",
+          "text": "Customer expresses concern about the lack of guarantees and may leave the company."
+        },
+        {
+          "category": "process_gap",
+          "text": "Agent did not have authority to approve the claim and did not inform the customer of this."
+        }
+      ],
+      "flags": {
+        "compliance_risk": true,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "high",
+      "references": [],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "My name is Joanne Reyes. I had a water leak in my kitchen two weeks ago and my claim was denied by letter.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 12,
+          "quote": "You'll get the full forty-two hundred. I guarantee it, no deductible either, since it was our mistake.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 31,
+          "quote": "I'm going to start my contractor on your word and then get denied again.",
+          "verified": true
+        },
+        {
+          "supports": "insight",
+          "turn": 28,
+          "quote": "I don't have the authority to approve claims, that's the adjuster. Sorry if that was unclear.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 37,
+        "customer_turns": 18,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 108.2,
+        "prompt_tokens": 2862,
+        "output_tokens": 578
+      }
+    },
+    {
+      "call_id": "call_007",
+      "status": "ok",
+      "error": null,
+      "call_type": "wrong_number",
+      "client_brand": null,
+      "summary": "The customer dialed the wrong number and hung up before any request was made.",
+      "intent": {
+        "primary": "general_inquiry",
+        "secondary": [],
+        "detail": ""
+      },
+      "outcome": {
+        "status": "not_applicable",
+        "detail": ""
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "negative",
+        "overall": "negative",
+        "trajectory": "stable"
+      },
+      "action_items": [
+        {
+          "owner": "customer",
+          "task": "Dial the correct number.",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "The customer hung up before making a request."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": false,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "low",
+      "references": [],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 5,
+          "quote": "Uh, who is this? I was trying to call the pharmacy, I think I dialed wrong.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 8,
+          "quote": "The caller has disconnected.",
+          "verified": true
+        }
+      ],
+      "needs_review": true,
+      "review_reasons": [
+        "call_type is wrong_number but intent is general_inquiry"
+      ],
+      "quality": {
+        "turns": 8,
+        "customer_turns": 3,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 33.1,
+        "prompt_tokens": 2000,
+        "output_tokens": 274
+      }
+    },
+    {
+      "call_id": "call_008",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Zenith Mobile",
+      "summary": "The customer wanted to upgrade their plan but was told there were no suitable options. The agent recommended the Unlimited plan, but the customer felt the prices were too high and decided to look elsewhere.",
+      "intent": {
+        "primary": "plan_change_inquiry",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Upgrade to a different plan"
+      },
+      "outcome": {
+        "status": "unresolved",
+        "detail": "The customer decided to look elsewhere after the call. The agent recommended the Unlimited plan but the customer felt the prices were too high."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "negative",
+        "overall": "negative",
+        "trajectory": "stable"
+      },
+      "action_items": [
+        {
+          "owner": "customer",
+          "task": "Think about the options and check other carriers.",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "Customer says this is the second call about the same issue."
+        },
+        {
+          "category": "churn_risk",
+          "text": "Customer expresses dissatisfaction and considers switching to another carrier."
+        },
+        {
+          "category": "data_quality",
+          "text": "Customer's tenure with the company is stated as six years, but the agent did not confirm this information."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "high",
+      "references": [],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "I'm on the Basic plan, ten gigs, and I keep going over.",
+          "verified": true
+        },
+        {
+          "supports": "intent",
+          "turn": 7,
+          "quote": "I'm paying thirty-two right now. So fifty-five is a big jump, and seventy-five is like double.",
+          "verified": true
+        },
+        {
+          "supports": "intent",
+          "turn": 11,
+          "quote": "I've been with you for six years.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 21,
+          "quote": "I'll think about it. Maybe I'll check what the other carriers have.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 23,
+        "customer_turns": 11,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 83.5,
+        "prompt_tokens": 2461,
+        "output_tokens": 490
+      }
+    },
+    {
+      "call_id": "call_009",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Harbor Mutual Insurance",
+      "summary": "The customer requested a status update on a claim for roof damage after a hailstorm. The agent provided an escalation ticket and asked for a written status update and tarp receipt.",
+      "intent": {
+        "primary": "claim_status",
+        "secondary": [
+          "technical_support"
+        ],
+        "detail": "Claim for roof damage after a hailstorm in September"
+      },
+      "outcome": {
+        "status": "resolved_pending_action",
+        "detail": "Escalation ticket E-S-C-7812 raised for Mr. Pruitt. Written status update and tarp receipt expected."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "neutral",
+        "overall": "neutral",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Raise escalation ticket E-S-C-7812",
+          "due": null
+        },
+        {
+          "owner": "customer",
+          "task": "Send tarp receipt to claims@example.com with claim number in the subject line",
+          "due": null
+        },
+        {
+          "owner": "agent",
+          "task": "Ask supervisor to call back with written status update",
+          "due": "end of day tomorrow"
+        }
+      ],
+      "insights": [
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the second time they've called about the claim."
+        },
+        {
+          "category": "churn_risk",
+          "text": "Customer expresses frustration and mentions they are trying to be patient but this is wearing them out."
+        },
+        {
+          "category": "process_gap",
+          "text": "No direct line to adjusters, only internal system for communication."
+        },
+        {
+          "category": "data_quality",
+          "text": "Agent used the claim number provided by the customer (CLM-29146) but customer provided a different number (CLM-29146) in the call."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": true
+      },
+      "supervisor_priority": "medium",
+      "references": [
+        {
+          "type": "escalation",
+          "value": "E-S-C-7812",
+          "verified": true
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 3,
+          "quote": "I'm calling about the status of a claim. I filed it nearly five weeks ago and I keep getting nothing but, uh, automated emails.",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 18,
+          "quote": "I don't have a direct line to adjusters. I can send a message through the internal system, but I can't promise when they'd respond.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 31,
+          "quote": "I hope somebody actually calls. I'm trying to be patient but this is wearing me out.",
+          "verified": true
+        },
+        {
+          "supports": "insight",
+          "turn": 27,
+          "quote": "Please make sure he has that.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 34,
+        "customer_turns": 15,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 124.1,
+        "prompt_tokens": 2815,
+        "output_tokens": 680
+      }
+    },
+    {
+      "call_id": "call_010",
+      "status": "ok",
+      "error": null,
+      "call_type": "customer_service",
+      "client_brand": "Nimbus Home Networks",
+      "summary": "The customer reported a router issue with intermittent connection. The agent attempted to resolve the issue but could not find the correct serial number and suggested a technician visit.",
+      "intent": {
+        "primary": "technical_support",
+        "secondary": [
+          "order_issue"
+        ],
+        "detail": "Router connection issues"
+      },
+      "outcome": {
+        "status": "resolved_pending_action",
+        "detail": "Created ticket TK-44180 for technician visit; customer advised to use a wired connection until the technician arrives."
+      },
+      "sentiment": {
+        "start": "negative",
+        "end": "neutral",
+        "overall": "neutral",
+        "trajectory": "improved"
+      },
+      "action_items": [
+        {
+          "owner": "agent",
+          "task": "Note both the cell and landline numbers for the customer",
+          "due": null
+        },
+        {
+          "owner": "company",
+          "task": "Create a technician visit ticket (TK-44180) and schedule a call within two business days",
+          "due": "within two business days"
+        },
+        {
+          "owner": "customer",
+          "task": "Use a wired connection to avoid factory reset until the technician arrives",
+          "due": null
+        }
+      ],
+      "insights": [
+        {
+          "category": "data_quality",
+          "text": "Agent could not find the correct serial number due to a mismatch between the customer's and the system's records."
+        },
+        {
+          "category": "repeat_contact",
+          "text": "Customer mentions this is the second call about the same issue."
+        },
+        {
+          "category": "process_gap",
+          "text": "Agent could not resolve the issue remotely due to missing serial number and lack of remote access."
+        },
+        {
+          "category": "churn_risk",
+          "text": "Customer expresses frustration and dissatisfaction with the service, indicating a potential churn risk."
+        }
+      ],
+      "flags": {
+        "compliance_risk": false,
+        "churn_risk": true,
+        "repeat_contact": true,
+        "escalation_requested": false
+      },
+      "supervisor_priority": "medium",
+      "references": [
+        {
+          "type": "ticket",
+          "value": "TK-44180",
+          "verified": true
+        }
+      ],
+      "evidence": [
+        {
+          "supports": "intent",
+          "turn": 2,
+          "quote": "Nimbus technical support, this is Ravi. How can I help?",
+          "verified": true
+        },
+        {
+          "supports": "outcome",
+          "turn": 28,
+          "quote": "That explains it. The replacement serial may not have been linked. Okay. So here's what I'll do. I can't fix this remotely, so I'll create a ticket for a technician.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 36,
+          "quote": "Unfortunately yes. If you can, use a wired connection to your laptop, and avoid the factory reset until the technician comes.",
+          "verified": true
+        },
+        {
+          "supports": "sentiment",
+          "turn": 38,
+          "quote": "You're welcome, Greg. Sorry I couldn't fix it right now.",
+          "verified": true
+        }
+      ],
+      "needs_review": false,
+      "review_reasons": [],
+      "quality": {
+        "turns": 38,
+        "customer_turns": 18,
+        "unparsed_lines": 0,
+        "truncated": false,
+        "attempts": 1,
+        "processing_seconds": 137.1,
+        "prompt_tokens": 3022,
+        "output_tokens": 667
+      }
+    }
+  ]
+}

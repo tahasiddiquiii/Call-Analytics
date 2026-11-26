@@ -1,0 +1,23 @@
+System: Thank you for calling Meridian Care on behalf of Zenith Mobile. This call may be recorded.
+Agent: Zenith Mobile sales, this is Brad. How can I help you today?
+Customer: Hi Brad. I'm on the Basic plan, ten gigs, and I keep going over. I've been thinking about upgrading. What do you have?
+Agent: Great, you're in the right place. We have the Plus plan at fifty-five a month with forty gigs, and the Unlimited at seventy-five.
+Customer: Seventy-five. Hmm. And what's Plus again, uh, fifty-five?
+Agent: Fifty-five dollars, forty gigabytes, yeah. Most people go with Unlimited honestly.
+Customer: I'm paying thirty-two right now. So fifty-five is a big jump, and seventy-five is like double. I'm not sure I can do that.
+Agent: Well, it's a good value for what you get. Data usage only goes up these days.
+Customer: Sure, but I'm on a tight budget. Is there anything in between? Like twenty-five gigs for forty or something? Or can I just add a data pack for a month?
+Agent: We don't really do in-between plans. It's Plus or Unlimited. I'd recommend Unlimited.
+Customer: I'm saying seventy-five is too much. Are there any discounts? Student, family, loyalty? I've been with you for six years.
+Agent: Loyalty doesn't really apply to upgrades. Prices are the prices.
+Customer: Okay, so what about a bundle with my home internet? My wife's on your broadband.
+Agent: I can't speak to that on this line, that'd be a different department.
+Customer: Can you transfer me or tell me the number?
+Agent: I don't have it handy. Look, do you want to upgrade today or not? The Unlimited has a free streaming trial.
+Customer: I don't need streaming. I need something that costs less than fifty. It's not complicated.
+Agent: Then the Basic plan is the only one under fifty. You could just limit your usage.
+Customer: Wow. Okay. So there's nothing you can offer me. That's, honestly, kind of disappointing after six years.
+Agent: I'm sorry you feel that way. Anything else I can help with?
+Customer: No. I'll think about it. Maybe I'll check what the other carriers have.
+Agent: Okay. Thanks for calling Zenith.
+Customer: Yeah. Bye.

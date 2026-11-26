@@ -1,0 +1,371 @@
+{
+  "_about": "Hand labels for the 10 provided calls, written from reading each transcript and frozen before prompt tuning. Rules: eval/labeling_guide.md. must_mention: each inner list is one fact; any of its words counts as a match (searched in summary, intent/outcome detail, action items and insights, lower case). pii_terms: names, addresses, phone/card/policy digits that must not appear in text fields. Added after v1 (see labeling_guide.md): repeat_contact=false for calls 001, 006, 008 and the address/card/phone pii_terms; earlier runs are re-scored with the same key.",
+  "calls": {
+    "call_001": {
+      "call_type": "customer_service",
+      "intent_primary": "appointment_change",
+      "intent_secondary_any": [
+        "account_update"
+      ],
+      "outcome_status": "resolved",
+      "sentiment_start": "neutral",
+      "sentiment_end": "positive",
+      "flags_true": [],
+      "flags_false": [
+        "compliance_risk",
+        "churn_risk",
+        "repeat_contact"
+      ],
+      "must_mention": [
+        [
+          "tuesday"
+        ],
+        [
+          "fast"
+        ],
+        [
+          "address"
+        ],
+        [
+          "insur"
+        ]
+      ],
+      "references": [],
+      "pii_terms": [
+        "rakesh",
+        "verma",
+        "palm residency",
+        "greenfield",
+        "402",
+        "50014",
+        "eighty-four"
+      ]
+    },
+    "call_002": {
+      "call_type": "customer_service",
+      "intent_primary": "cancellation_request",
+      "outcome_status": "resolved_pending_action",
+      "sentiment_start": "very_negative",
+      "sentiment_end": "neutral",
+      "flags_true": [
+        "churn_risk"
+      ],
+      "flags_false": [
+        "compliance_risk"
+      ],
+      "must_mention": [
+        [
+          "52",
+          "fifty-two",
+          "fifty two"
+        ],
+        [
+          "30 days",
+          "thirty days",
+          "30-day",
+          "thirty-day"
+        ],
+        [
+          "line check",
+          "line-quality",
+          "line quality",
+          "slowdown",
+          "speed"
+        ],
+        [
+          "thursday"
+        ]
+      ],
+      "references": [],
+      "pii_terms": [
+        "dana",
+        "whitfield",
+        "0137",
+        "dana.w",
+        "example.com"
+      ]
+    },
+    "call_003": {
+      "call_type": "customer_service",
+      "intent_primary": "order_issue",
+      "outcome_status": "resolved_pending_action",
+      "sentiment_start": "negative",
+      "sentiment_end": "positive",
+      "flags_true": [
+        "repeat_contact"
+      ],
+      "flags_false": [
+        "compliance_risk"
+      ],
+      "must_mention": [
+        [
+          "replacement"
+        ],
+        [
+          "locker"
+        ],
+        [
+          "expedit"
+        ],
+        [
+          "claim",
+          "9031"
+        ],
+        [
+          "third",
+          "repeat",
+          "again",
+          "before",
+          "previous"
+        ]
+      ],
+      "references": [
+        "CL-9031"
+      ],
+      "pii_terms": [
+        "tom",
+        "alvarez",
+        "0188",
+        "0166"
+      ]
+    },
+    "call_004": {
+      "call_type": "test_call",
+      "intent_primary": "non_customer_call",
+      "outcome_status": "not_applicable",
+      "sentiment_start": "neutral",
+      "sentiment_end": "neutral",
+      "flags_true": [],
+      "flags_false": [
+        "compliance_risk",
+        "churn_risk",
+        "repeat_contact",
+        "escalation_requested"
+      ],
+      "must_mention": [
+        [
+          "test"
+        ]
+      ],
+      "references": [],
+      "pii_terms": [
+        "priya"
+      ]
+    },
+    "call_005": {
+      "call_type": "customer_service",
+      "intent_primary": "billing_dispute",
+      "outcome_status": "resolved",
+      "sentiment_start": "very_negative",
+      "sentiment_end": "positive",
+      "flags_true": [],
+      "flags_false": [
+        "compliance_risk"
+      ],
+      "must_mention": [
+        [
+          "82",
+          "eighty-two",
+          "eighty two"
+        ],
+        [
+          "refund"
+        ],
+        [
+          "scheduled payment",
+          "scheduled"
+        ],
+        [
+          "notification",
+          "text",
+          "alert",
+          "confirmation"
+        ]
+      ],
+      "references": [
+        "RF-22068"
+      ],
+      "pii_terms": [
+        "carla",
+        "mendes",
+        "4471",
+        "0194",
+        "33104"
+      ]
+    },
+    "call_006": {
+      "call_type": "customer_service",
+      "intent_primary": "claim_appeal",
+      "outcome_status": "unresolved",
+      "sentiment_start": "neutral",
+      "sentiment_end": "very_negative",
+      "flags_true": [
+        "compliance_risk"
+      ],
+      "flags_false": [
+        "repeat_contact"
+      ],
+      "must_mention": [
+        [
+          "guarantee",
+          "promise",
+          "promised"
+        ],
+        [
+          "deductible"
+        ],
+        [
+          "monday"
+        ],
+        [
+          "appeal"
+        ]
+      ],
+      "references": [],
+      "pii_terms": [
+        "joanne",
+        "reyes",
+        "449",
+        "2017"
+      ]
+    },
+    "call_007": {
+      "call_type": "wrong_number",
+      "call_type_also_ok": [
+        "abandoned"
+      ],
+      "intent_primary": "non_customer_call",
+      "outcome_status": "not_applicable",
+      "sentiment_start": "neutral",
+      "sentiment_end": "neutral",
+      "flags_true": [],
+      "flags_false": [
+        "compliance_risk",
+        "churn_risk",
+        "repeat_contact",
+        "escalation_requested"
+      ],
+      "must_mention": [
+        [
+          "wrong number",
+          "pharmacy",
+          "dialed",
+          "dialled",
+          "wrong"
+        ]
+      ],
+      "references": [],
+      "pii_terms": []
+    },
+    "call_008": {
+      "call_type": "customer_service",
+      "intent_primary": "plan_change_inquiry",
+      "outcome_status": "unresolved",
+      "sentiment_start": "neutral",
+      "sentiment_end": "negative",
+      "flags_true": [
+        "churn_risk"
+      ],
+      "flags_false": [
+        "compliance_risk",
+        "repeat_contact"
+      ],
+      "must_mention": [
+        [
+          "unlimited",
+          "plus",
+          "upgrade"
+        ],
+        [
+          "discount",
+          "loyalty",
+          "budget",
+          "cheaper",
+          "afford",
+          "cost"
+        ],
+        [
+          "competitor",
+          "other carrier",
+          "carriers",
+          "leave"
+        ]
+      ],
+      "references": [],
+      "pii_terms": []
+    },
+    "call_009": {
+      "call_type": "customer_service",
+      "intent_primary": "claim_status",
+      "outcome_status": "escalated",
+      "sentiment_start": "negative",
+      "sentiment_end": "negative",
+      "flags_true": [
+        "repeat_contact",
+        "escalation_requested"
+      ],
+      "flags_false": [
+        "compliance_risk"
+      ],
+      "must_mention": [
+        [
+          "supervisor",
+          "escalat"
+        ],
+        [
+          "callback",
+          "call back",
+          "call the customer back",
+          "one business day"
+        ],
+        [
+          "tarp"
+        ]
+      ],
+      "references": [
+        "CLM-291-446",
+        "ESC-7812"
+      ],
+      "pii_terms": [
+        "walter",
+        "pruitt",
+        "0129",
+        "mr. pruitt"
+      ]
+    },
+    "call_010": {
+      "call_type": "customer_service",
+      "intent_primary": "technical_support",
+      "outcome_status": "escalated",
+      "sentiment_start": "negative",
+      "sentiment_end": "neutral",
+      "flags_true": [],
+      "flags_false": [
+        "compliance_risk"
+      ],
+      "must_mention": [
+        [
+          "technician"
+        ],
+        [
+          "serial"
+        ],
+        [
+          "replacement",
+          "not registered",
+          "not linked",
+          "linked"
+        ]
+      ],
+      "references": [
+        "TK-44180"
+      ],
+      "pii_terms": [
+        "greg",
+        "halloran",
+        "0274",
+        "0247"
+      ]
+    }
+  }
+}

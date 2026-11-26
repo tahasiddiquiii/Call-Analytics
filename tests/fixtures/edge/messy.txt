@@ -1,0 +1,8 @@
+System: Thank you for calling Meridian Care on behalf of Acme Water.
+Agent: Hello, how can I help?
+Customer: My bill is wrong and
+it is far too high.
+Supervisor: (barging in) all good here
+
+
+Agent: Let me check.

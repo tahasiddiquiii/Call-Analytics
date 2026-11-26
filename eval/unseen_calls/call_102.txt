@@ -1,0 +1,13 @@
+System: Thank you for calling Meridian Care on behalf of Brightcart. Your call may be monitored or recorded.
+Agent: Brightcart customer care, this is Joel.
+Customer: Yeah. I returned a jacket three weeks ago and I still don't have my refund. Sixty dollars.
+Agent: Order number?
+Customer: B C, eight eight two, zero four one.
+Agent: Okay. The return was received at the warehouse. Refunds take time.
+Customer: How much time? It's been three weeks. Your website says seven days.
+Agent: It depends. I can't really see more than that.
+Customer: Can you escalate it or something? I want to speak to someone who can actually check.
+Agent: There's no one available right now. Try again next week.
+Customer: Seriously? This is the third time I'm calling. I'm going to dispute it with my bank.
+Agent: That's up to you.
+Customer: Unbelievable. Bye.

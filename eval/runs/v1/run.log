@@ -1,0 +1,12 @@
+13:39:55 INFO Model qwen2.5:3b on CPU via ollama 0.40.18
+13:41:57 INFO [1/10] call_001  ok  121.8s
+13:43:39 INFO [2/10] call_002  needs review  102.1s
+13:46:32 INFO [3/10] call_003  ok  173.2s
+13:47:09 INFO [4/10] call_004  needs review  36.9s
+13:49:26 INFO [5/10] call_005  ok  136.9s
+13:51:14 INFO [6/10] call_006  ok  108.2s
+13:51:47 INFO [7/10] call_007  needs review  33.1s
+13:53:11 INFO [8/10] call_008  ok  83.5s
+13:55:15 INFO [9/10] call_009  ok  124.1s
+13:57:32 INFO [10/10] call_010  ok  137.1s
+13:57:32 INFO Wrote eval/runs/v1/records.json: 10 ok, 0 failed, 3 need review, 1057s total

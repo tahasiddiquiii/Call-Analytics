@@ -1,0 +1,34 @@
+System: Thank you for calling Meridian Care on behalf of Harbor Mutual Insurance. This call may be recorded.
+Agent: Harbor Mutual claims line, this is Simone. How can I help?
+Customer: Hi, I'm calling about the status of a claim. I filed it nearly five weeks ago and I keep getting nothing but, uh, automated emails.
+Agent: I'm sorry about that. Can I have your claim number?
+Customer: It's C L M, dash, two nine one, dash, four four six. Is that right? Let me read it again. C L M two nine one four four six.
+Agent: Thank you. And your name?
+Customer: Walter Pruitt.
+Agent: Okay, Mr. Pruitt, I have it. This is the claim for the roof damage after the hailstorm in September, correct?
+Customer: Yes, correct. The adjuster came out on the ninth of October, took pictures, said he'd get back within two weeks. It's been, what, thirty days.
+Agent: I see the inspection note. The status shows pending review, assigned to the property team. That's all I can see on my end.
+Customer: Pending review. For thirty days? What does that mean? Is somebody actually looking at this?
+Agent: I can't see who is assigned. I just have a status field and a last-updated date, which was October twenty-first.
+Customer: October twenty-first. So nothing's moved in almost four weeks. I have a tarp on the roof, it's getting windy, I've had to pay two hundred and fifty dollars for the tarp already.
+Agent: I understand. Do you have any other documents you think are missing, like repair estimates?
+Customer: I sent the contractor's estimate on October fourteenth. Eight thousand six hundred. Did you get that?
+Agent: I do see an attachment dated the fourteenth. So it was received.
+Customer: So it was received and nothing happened. This is ridiculous. Can I talk to the adjuster?
+Agent: I don't have a direct line to adjusters. I can send a message through the internal system, but I can't promise when they'd respond.
+Customer: That's what the last two agents said too. I want a supervisor, please.
+Agent: Understood. Let me see if one is available. Please hold for a moment.
+System: Please hold, your call is important to us.
+Agent: Mr. Pruitt, thanks for holding. Our supervisor, Raymond, is currently in a meeting and the claims escalation queue is closed for the evening. What I can do is raise a formal escalation and he will call you back.
+Customer: When? Because I've been told callbacks before and nobody called.
+Agent: Within one business day, so by end of day tomorrow. I'm putting it in as high priority with the claim number and your note about the tarp costs.
+Customer: End of day tomorrow. Okay. And it's definitely going to my cell, the five five five, oh one two nine?
+Agent: Let me confirm. The number on file is five five five, zero one two nine. Is that the right one?
+Customer: Yes, that's the one. Please make sure he has that.
+Agent: I have. I'm also adding a note to ask for a written status update and the expected decision date.
+Customer: And the tarp receipt? Can I send that so they add it?
+Agent: Yes. Email the receipt to claims at example dot com with your claim number in the subject line.
+Customer: Okay, I'll do that tonight. Alright. I hope somebody actually calls. I'm trying to be patient but this is wearing me out.
+Agent: I completely understand, and I'm sorry for the delay. The escalation reference is E-S-C, seven eight one two. Keep that handy.
+Customer: E S C seven eight one two. Got it. Thank you, Simone.
+Agent: Thank you for your patience, Mr. Pruitt.

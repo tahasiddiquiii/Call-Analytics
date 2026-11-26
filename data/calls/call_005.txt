@@ -1,0 +1,42 @@
+System: Thank you for calling Meridian Care on behalf of Northwave Mobile. This call may be recorded.
+Agent: Northwave Mobile billing, this is Aaron. How can I help?
+Customer: Yeah, I've got a problem and I'm already annoyed. I got charged twice for my plan this month. Twice! Eighty-two dollars each time.
+Agent: I'm sorry to hear that. Let me take a look. Can I have the name and mobile number on the account?
+Customer: Carla Mendes. My number is five five five, oh one nine four.
+Agent: Thanks, Carla. And for security, the billing zip code?
+Customer: Three, three, one, oh, four. No wait, it's three three one zero four, yes. Same thing.
+Agent: Thank you. Give me a second to pull up the billing history.
+Customer: Sure. Take your time, I've been on hold for twenty minutes before this, by the way.
+Agent: I apologize for the wait. Okay, I do see two charges of eighty-two dollars on the third and the fifth of this month.
+Customer: Yes! That's what I said. Why does your system charge people twice? That's basically stealing.
+Agent: I understand why that feels frustrating. Let me find out what happened. Looks like the first payment was the autopay, and the second was a manual payment posted from the app.
+Customer: I didn't make any manual payment. I never touch the app. I use autopay for a reason.
+Agent: It shows as made from the app on the fifth at nine forty p.m. Is there anyone else who has access to your login?
+Customer: My husband, maybe. Uh, he might have tried to pay when the autopay failed last month. Because last month the autopay failed, right? I got that text.
+Agent: That would explain it. It looks like last month's autopay did fail, and he probably paid then, and then this month there was another payment through the app saved as a scheduled payment.
+Customer: Ugh. So it's a scheduled payment he set up. Okay, but still. Your app didn't tell him he was about to double pay, nothing.
+Agent: That's a fair point and I'll note it as feedback. Right now, what matters is getting your eighty-two dollars back, and I can do that for you.
+Customer: Okay. So how does that work? Is it going to be credit or money back on my card?
+Agent: I can send it back to the original card, which takes five to seven business days, or apply it as a credit to next month's bill, which is immediate.
+Customer: Card. I don't want credit. I need the money, we've got rent coming up.
+Agent: Understood. Refunding eighty-two dollars to the card ending in four four seven one. Is that the card you used?
+Customer: Four four seven one, yes. That's the Visa.
+Agent: Great. I'm submitting the refund now. The reference number is R-F-two-two-zero-six-eight.
+Customer: Wait, say that again. R F...
+Agent: R-F, two two zero six eight.
+Customer: Two two zero six eight. Okay. And that's definitely approved? Because last time with another company they said it was approved and nothing came.
+Agent: Yes, as a billing agent I have the authority to approve duplicate payment refunds up to one hundred dollars. It's approved and submitted.
+Customer: Okay. That helps. Can you also cancel that scheduled payment so it doesn't happen again next month?
+Agent: Good thinking. Let me check. Yes, there's a scheduled payment for the fifth of next month. I've cancelled it.
+Customer: Thank you. And can you turn on a notification so I know when a payment goes through?
+Agent: Yes, I've enabled payment confirmation texts to your number. You'll get one for every payment, autopay or manual.
+Customer: Good. And what about the autopay failing last month? Why did that fail?
+Agent: The card on file had expired in the system, and you updated it on the third. That's why it succeeded this month.
+Customer: Oh, right, I did update it. So my husband paid before I fixed it, and then it double charged. Okay. I see.
+Agent: Exactly. It's a bit of a timing thing, and neither of you did anything wrong really.
+Customer: Okay. I'm sorry I was snappy at the start. I just got scared about money.
+Agent: No need to apologize at all, Carla. It's your money and you were right to call.
+Customer: Thank you, honestly. You've been much better than the last couple of people I dealt with.
+Agent: I appreciate that. You'll see the refund in five to seven business days, and if it's not there by next Friday, call us back with that reference number.
+Customer: Will do. Thanks, Aaron.
+Agent: Take care, Carla.
