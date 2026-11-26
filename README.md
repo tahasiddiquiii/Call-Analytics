@@ -138,16 +138,11 @@ Every record has **the same keys in every case**. When `status` is `"failed"`, t
 
 ## Documentation
 
-All project documentation is in [`docs/`](docs/). Start with [`docs/introduction.md`](docs/introduction.md).
+All project documentation is in [`docs/`](docs/).
 
 | File | Contents |
 |---|---|
-| [introduction.md](docs/introduction.md) | What the project is, where to start, repository map |
-| [goals.md](docs/goals.md) | Every requirement from the brief and its status; scoring aims |
-| [plan.md](docs/plan.md) | The plan as approved before building |
 | [architecture.md](docs/architecture.md) | Pipeline, modules, rules in code, output contract, reliability design |
-| [features.md](docs/features.md) | What the records, CLI and tools provide |
-| [rules.md](docs/rules.md) | Brief constraints, model rules, code rules, working rules |
 | [iterations.md](docs/iterations.md) | v1→v4 with real before/after outputs and scores; bake-off |
 | [fixes.md](docs/fixes.md) | Every bug and wrong claim found, and how it was fixed |
 | [qa_report.md](docs/qa_report.md) | Final quality results, tests, held-out calls, open risks |
@@ -155,7 +150,6 @@ All project documentation is in [`docs/`](docs/). Start with [`docs/introduction
 | [labeling_guide.md](docs/labeling_guide.md) | How the hand labels were made |
 | [ai_usage.md](docs/ai_usage.md) | AI tools used, what they produced, what was corrected |
 | [working_log.md](docs/working_log.md) | What was done, in order, with times |
-| [demo_guide.md](docs/demo_guide.md) | Run from scratch, a 12-minute live demo script, likely questions |
 
 ## Project layout
 
