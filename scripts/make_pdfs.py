@@ -52,10 +52,10 @@ def md_to_html(md: str) -> str:
             lst = kind
         if kind:
             out.append(f"<li>{inline((m_ul or m_ol).group(1))}</li>")
-        elif line.startswith("## "):
-            out.append(f"<h2>{inline(line[3:])}</h2>")
+        elif line.startswith("## "):  # bold paragraph: LibreOffice's heading styles add too much space
+            out.append(f"<p style='margin-top:5pt'><b><font size='3' color='#131B2E'>{inline(line[3:])}</font></b></p>")
         elif line.startswith("# "):
-            out.append(f"<h1>{inline(line[2:])}</h1>")
+            out.append(f"<p><b><font size='5' face='Cambria'>{inline(line[2:])}</font></b></p>")
         elif line.strip():
             out.append(f"<p>{inline(line)}</p>")
     if lst:

@@ -3,10 +3,10 @@
   "model": "qwen2.5:3b",
   "prompt_version": "v4-9fb0167b",
   "calls": 10,
-  "wall_seconds": 1226.8,
-  "seconds_per_call_avg": 122.6,
-  "seconds_per_call_max": 174.3,
-  "peak_model_process_ram_gb": 2.22,
+  "wall_seconds": 929.5,
+  "seconds_per_call_avg": 92.9,
+  "seconds_per_call_max": 121.2,
+  "peak_model_process_ram_gb": 2.13,
   "peak_process": "/opt/homebrew/Cellar/ollama/0.40.18/libexec/lib/ollama/llama-server --model",
   "exit_code": 0
 }

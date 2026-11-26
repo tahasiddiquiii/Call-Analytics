@@ -1,6 +1,6 @@
 # Evaluation: `outputs/records.json`
 
-Model `qwen2.5:3b`, prompt `v4-9fb0167b`, 10/10 records ok, 3 flagged for review, 1226s total.
+Model `qwen2.5:3b`, prompt `v4-9fb0167b`, 10/10 records ok, 3 flagged for review, 929s total.
 
 | Check | Score |
 |---|---|

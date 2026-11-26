@@ -1,5 +1,7 @@
 # Call Analytics Assignment: Implementation Plan
 
+> *This is the plan as approved before building. Where evaluation changed the design (three small model questions instead of one, code-extracted references, the package at `callanalytics/` rather than `src/`), the reasons are in `docs/iterations.md`.*
+
 > **Goal:** a small, well-judged system that turns call transcripts into trustworthy, machine-readable records, with proof that it was checked.
 > The brief says: *"We assess your judgement … A small, well-judged submission is better than a large one."*
 > So this plan aims to impress through **correctness, reliability and evidence**, not size.
